@@ -1,0 +1,23 @@
+namespace TesteTecnico.Data;
+
+using Microsoft.EntityFrameworkCore;
+
+using TesteTecnico.Models;
+
+public class AppDbContext : DbContext
+{
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<Anime> Animes { get; set; }
+    public DbSet<Diretor> Diretores { get; set; }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Anime>()
+            .HasOne(a => a.Diretor)
+            .WithMany(d => d.Animes)
+            .HasForeignKey(a => a.DiretorId);
+    }
+}
