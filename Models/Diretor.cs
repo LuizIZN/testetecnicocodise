@@ -1,10 +1,10 @@
 namespace TesteTecnico.Models;
 
-public class Diretor
+public class Diretor(string Nome, string DataNascimento)
 {
     public Guid Id { get; private set; }
-    public string Nome { get; private set; } = string.Empty;
-    public string DataNascimento { get; private set; } = string.Empty;
+    public string Nome { get; private set; } = Nome;
+    public string DataNascimento { get; private set; } = DataNascimento;
 
     public List<Anime> Animes { get; private set; } = [];
 }
