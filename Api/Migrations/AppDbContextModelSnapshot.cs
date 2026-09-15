@@ -22,7 +22,7 @@ namespace TesteTecnico.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("TesteTecnico.Models.Anime", b =>
+            modelBuilder.Entity("TesteTecnico.Domain.Models.Anime", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +52,7 @@ namespace TesteTecnico.Migrations
                     b.ToTable("Animes");
                 });
 
-            modelBuilder.Entity("TesteTecnico.Models.Diretor", b =>
+            modelBuilder.Entity("TesteTecnico.Domain.Models.Diretor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -71,9 +71,9 @@ namespace TesteTecnico.Migrations
                     b.ToTable("Diretores");
                 });
 
-            modelBuilder.Entity("TesteTecnico.Models.Anime", b =>
+            modelBuilder.Entity("TesteTecnico.Domain.Models.Anime", b =>
                 {
-                    b.HasOne("TesteTecnico.Models.Diretor", "Diretor")
+                    b.HasOne("TesteTecnico.Domain.Models.Diretor", "Diretor")
                         .WithMany("Animes")
                         .HasForeignKey("DiretorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -82,7 +82,7 @@ namespace TesteTecnico.Migrations
                     b.Navigation("Diretor");
                 });
 
-            modelBuilder.Entity("TesteTecnico.Models.Diretor", b =>
+            modelBuilder.Entity("TesteTecnico.Domain.Models.Diretor", b =>
                 {
                     b.Navigation("Animes");
                 });
