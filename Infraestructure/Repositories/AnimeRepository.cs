@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using TesteTecnico.Infraestructure.Data;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Domain.Models;
+using TesteTecnico.Application.Dtos;
 
 namespace TesteTecnico.Infraestructure.Repositories;
 
@@ -19,10 +20,14 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
         return await _context.Animes.FindAsync(id);
     }
 
-    public async Task AddAsync(Anime anime)
+    public async Task<Anime> AddAsync(CreateAnimeRequest anime)
     {
-        await _context.Animes.AddAsync(anime);
+        var newAnime = new Anime(Nome: anime.Nome, Descricao: anime.Descricao, AnoLancamento: anime.AnoLancamento, DiretorId: anime.DiretorId, NumeroEpisodios: anime.NumeroEpisodios);
+
+        await _context.Animes.AddAsync(newAnime);
         await _context.SaveChangesAsync();
+
+        return newAnime;
     }
 
     public async Task UpdateAsync(Anime anime)
