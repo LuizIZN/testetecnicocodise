@@ -1,4 +1,4 @@
-namespace TesteTecnico.Models;
+namespace TesteTecnico.Domain.Models;
 
 public class Diretor(string Nome, string DataNascimento)
 {

@@ -1,8 +1,8 @@
-namespace TesteTecnico.Data;
+namespace TesteTecnico.Infraestructure.Data;
 
 using Microsoft.EntityFrameworkCore;
 
-using TesteTecnico.Models;
+using TesteTecnico.Domain.Models;
 
 public class AppDbContext : DbContext
 {

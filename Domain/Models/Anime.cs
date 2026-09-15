@@ -1,4 +1,4 @@
-namespace TesteTecnico.Models;
+namespace TesteTecnico.Domain.Models;
 
 public class Anime(string Nome, string Descricao, int AnoLancamento, int NumeroEpisodios, Guid DiretorId)
 {
