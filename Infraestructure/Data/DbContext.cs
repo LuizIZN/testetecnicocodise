@@ -17,7 +17,7 @@ public class AppDbContext : DbContext
     {
         modelBuilder.Entity<Anime>()
             .HasOne(a => a.Diretor)
-            .WithMany(d => d.Animes)
+            .WithMany()
             .HasForeignKey(a => a.DiretorId);
     }
 }
