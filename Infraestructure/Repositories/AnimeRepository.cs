@@ -12,12 +12,12 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
 
     public async Task<IEnumerable<Anime>> GetAllAsync()
     {
-        return await _context.Animes.ToListAsync();
+        return await _context.Animes.Include(a => a.Diretor).ToListAsync();
     }
 
-    public async Task<Anime?> GetByIdAsync(int id)
+    public async Task<Anime?> GetByIdAsync(Guid id)
     {
-        return await _context.Animes.FindAsync(id);
+        return await _context.Animes.Include(a => a.Diretor).FirstOrDefaultAsync(a => a.Id == id);
     }
 
     public async Task<Anime> AddAsync(CreateAnimeRequest anime)
