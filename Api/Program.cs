@@ -21,6 +21,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
+builder.Services.AddScoped<IDiretorRepository, DiretorRepository>();
+builder.Services.AddScoped<IDiretorService, DiretorService>();
 
 
 var app = builder.Build();
