@@ -3,6 +3,7 @@ using TesteTecnico.Infraestructure.Data;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Domain.Models;
 using TesteTecnico.Application.Dtos;
+using TesteTecnico.Application.Dtos.Anime;
 
 namespace TesteTecnico.Infraestructure.Repositories;
 
@@ -30,19 +31,33 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
         return newAnime;
     }
 
-    public async Task UpdateAsync(Anime anime)
+    public async Task<Anime?> UpdateAsync(UpdateAnimeRequest anime, Guid id)
     {
-        _context.Animes.Update(anime);
+        var existingAnime = await _context.Animes.FirstOrDefaultAsync(a => a.Id == id);
+
+        if (existingAnime is null) return null;
+
+        var updatedAnime = new Anime(
+            Nome: anime.Nome ?? existingAnime.Nome,
+            Descricao: anime.Descricao ?? existingAnime.Descricao,
+            AnoLancamento: anime.AnoLancamento ?? existingAnime.AnoLancamento,
+            DiretorId: anime.DiretorId ?? existingAnime.DiretorId,
+            NumeroEpisodios: anime.NumeroEpisodios ?? existingAnime.NumeroEpisodios
+        );
+        existingAnime.Update(updatedAnime);
         await _context.SaveChangesAsync();
+        
+        return existingAnime;
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<Anime?> DeleteAsync(Guid id)
     {
         var anime = await _context.Animes.FindAsync(id);
-        if (anime != null)
-        {
-            _context.Animes.Remove(anime);
-            await _context.SaveChangesAsync();
-        }
+        if (anime == null) return null;
+
+        _context.Animes.Remove(anime);
+        await _context.SaveChangesAsync();
+
+        return anime;
     }
 }

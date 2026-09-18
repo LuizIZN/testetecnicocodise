@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Domain.Models;
+using TesteTecnico.Application.Dtos.Anime;
 
 [ApiController]
 [Route("anime")]
@@ -32,6 +33,49 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
         {
             var anime = await _animeService.GetByIdAsync(id);
             return Ok(anime);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<GetAnimeResponse>>> GetAll()
+    {
+        try
+        {
+            var animes = await _animeService.GetAllAsync();
+
+            return Ok(animes);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    [HttpPatch("{id}")]
+    public async Task<ActionResult<string>> Update(Guid id, UpdateAnimeRequest request)
+    {
+        try
+        {
+            _ = await _animeService.UpdateAsync(request, id);
+            return CreatedAtAction(nameof(GetById), new { id }, "Anime atualizado com sucesso!");
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        try
+        {
+            _ = await _animeService.DeleteAsync(id);
+            return NoContent();
         }
         catch (Exception ex)
         {
