@@ -1,4 +1,5 @@
 using TesteTecnico.Application.Dtos;
+using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Domain.Models;
 
@@ -17,8 +18,8 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
 
     public async Task<IEnumerable<GetDiretorResponse>> GetAllAsync()
     {
-        var diretores = await _diretorRepository.GetAllAsync();
-        return diretores.Select(d => MapToGetDiretorResponse(d));
+        var diretores = await _diretorRepository.GetAllAsync() ?? throw new Exception("Nenhum diretor encontrado!");
+        return diretores.Select(MapToGetDiretorResponse);
     }
 
     public async Task<GetDiretorResponse?> GetByIdAsync(Guid id)
@@ -30,6 +31,11 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
     public async Task DeleteAsync(Guid id)
     {
         await _diretorRepository.DeleteAsync(id);
+    }
+
+    public async Task UpdateAsync(UpdateDiretorRequest request, Guid id)
+    {
+        await _diretorRepository.UpdateAsync(request, id);
     }
 
     private static GetDiretorResponse MapToGetDiretorResponse(Diretor diretor)

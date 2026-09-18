@@ -9,5 +9,14 @@ public class Anime(string Nome, string Descricao, int AnoLancamento, int NumeroE
     public int NumeroEpisodios { get; private set; } = NumeroEpisodios;
 
     public Guid DiretorId { get; private set; } = DiretorId;
-    public Diretor? Diretor {get; private set; }
+    public Diretor Diretor {get; private set; } = null!;
+
+    public void Update(Anime updatedAnime)
+    {
+        Nome = updatedAnime.Nome;
+        Descricao = updatedAnime.Descricao;
+        AnoLancamento = updatedAnime.AnoLancamento;
+        NumeroEpisodios = updatedAnime.NumeroEpisodios;
+        DiretorId = updatedAnime.DiretorId;
+    }
 }

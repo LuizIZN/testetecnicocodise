@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using TesteTecnico.Application.Dtos;
+using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Application.Interfaces;
 
 namespace TesteTecnico.Api.Controllers;
@@ -32,6 +33,36 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
         {
             var diretor = await _diretorService.GetByIdAsync(id);
             return Ok(diretor);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<GetDiretorResponse>>> GetAll()
+    {
+        try
+        {
+            var diretores = await _diretorService.GetAllAsync();
+
+            return Ok(diretores);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
+    
+    [HttpPatch("{id}")]
+    public async Task<ActionResult<string>> Update(Guid id, UpdateDiretorRequest request)
+    {
+        try
+        {
+            await _diretorService.UpdateAsync(request, id);
+
+            return CreatedAtAction(nameof(GetById), new { id }, "Diretor atualizado com sucesso!");
         }
         catch (Exception ex)
         {
