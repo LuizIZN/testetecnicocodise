@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-
+using TesteTecnico.Api.Seeders;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Services;
 using TesteTecnico.Domain.Models;
@@ -32,6 +32,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
 }
 
 app.UseHttpsRedirection();
