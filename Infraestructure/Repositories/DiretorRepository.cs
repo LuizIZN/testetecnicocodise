@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using TesteTecnico.Application.Dtos;
+using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Domain.Models;
 using TesteTecnico.Infraestructure.Data;
@@ -38,5 +39,15 @@ public sealed class DiretorRepository(AppDbContext context) : IDiretorRepository
             _context.Diretores.Remove(diretor);
             await _context.SaveChangesAsync();
         }
+    }
+
+    public async Task UpdateAsync(UpdateDiretorRequest request, Guid id)
+    {
+        var diretor = await _context.Diretores.FirstOrDefaultAsync(d => d.Id == id) ?? throw new Exception("Diretor não encontrado.");
+
+        var diretorToUpdate = new Diretor(Nome: request.Nome ?? diretor.Nome, DataNascimento: request.DataNascimento ?? diretor.DataNascimento);
+
+        diretor.Update(diretorToUpdate);
+        await _context.SaveChangesAsync();
     }
 }
