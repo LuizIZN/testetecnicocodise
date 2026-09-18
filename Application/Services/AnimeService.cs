@@ -1,4 +1,5 @@
 using TesteTecnico.Application.Dtos;
+using TesteTecnico.Application.Dtos.Anime;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Domain.Models;
 
@@ -11,9 +12,9 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
 
     public async Task<IEnumerable<GetAnimeResponse>> GetAllAsync()
     {
-        var animes = await _animeRepository.GetAllAsync();
+        var animes = await _animeRepository.GetAllAsync() ?? throw new Exception("Nenhum anime encontrado!");
 
-        return animes.Select(a => MapToGetAnimeResponse(a));
+        return animes.Select(MapToGetAnimeResponse);
     }
 
     public async Task<GetAnimeResponse?> GetByIdAsync(Guid id)
@@ -25,20 +26,22 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
 
     public async Task<GetAnimeResponse> AddAsync(CreateAnimeRequest request)
     {
-        var diretor = await _diretorRepository.GetByIdAsync(request.DiretorId) ?? throw new Exception("Diretor não encontrado.");
+        _ = await _diretorRepository.GetByIdAsync(request.DiretorId) ?? throw new Exception("Diretor não encontrado.");
 
         var novoAnime = await _animeRepository.AddAsync(request);
         return MapToGetAnimeResponse(novoAnime);
     }
 
-    public async Task UpdateAsync(Anime anime)
+    public async Task<GetAnimeResponse?> UpdateAsync(UpdateAnimeRequest request, Guid id)
     {
-        await _animeRepository.UpdateAsync(anime);
+        var updatedAnime = await _animeRepository.UpdateAsync(request, id) ?? throw new Exception("Anime não encontrado!");
+        return MapToGetAnimeResponse(updatedAnime);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task<GetAnimeResponse?> DeleteAsync(Guid id)
     {
-        await _animeRepository.DeleteAsync(id);
+        var deletedAnime = await _animeRepository.DeleteAsync(id) ?? throw new Exception("Anime não encontrado!");
+        return MapToGetAnimeResponse(deletedAnime);
     }
 
     private static GetAnimeResponse MapToGetAnimeResponse(Anime anime)
@@ -49,8 +52,12 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
             Nome = anime.Nome,
             AnoLancamento = anime.AnoLancamento,
             NumeroEpisodios = anime.NumeroEpisodios,
-            Diretor = anime.Diretor,
-            DiretorId = anime.DiretorId,
+            Diretor = new GetDiretorResponse
+            {
+                Id = anime.Diretor.Id,
+                Nome = anime.Diretor.Nome,
+                DataNascimento = anime.Diretor.DataNascimento
+            },
             Descricao = anime.Descricao
         };
     }
