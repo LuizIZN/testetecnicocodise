@@ -26,6 +26,21 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
 
     public async Task<GetAnimeResponse> AddAsync(CreateAnimeRequest request)
     {
+        if (string.IsNullOrWhiteSpace(request.Nome) || string.IsNullOrWhiteSpace(request.Descricao))
+        {
+            throw new Exception("Os campos nome e descrição são obrigatórios!");
+        }
+
+        if (request.AnoLancamento <= 0 || request.NumeroEpisodios <= 0)
+        {
+            throw new Exception("Os campos ano de lançamento e número de episódios devem ser números maiores que zero!");
+        }
+
+        if (request.AnoLancamento > DateTime.Now.Year)
+        {
+            throw new Exception("Não é possível cadastrar um ano de lançamento maior que o ano atual!");
+        }
+
         _ = await _diretorRepository.GetByIdAsync(request.DiretorId) ?? throw new Exception("Diretor não encontrado.");
 
         var novoAnime = await _animeRepository.AddAsync(request);
@@ -34,6 +49,16 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
 
     public async Task<GetAnimeResponse?> UpdateAsync(UpdateAnimeRequest request, Guid id)
     {
+        if (request.AnoLancamento <= 0 || request.NumeroEpisodios <= 0)
+        {
+            throw new Exception("Os campos ano de lançamento e número de episódios devem ser números maiores que zero!");
+        }
+
+        if (request.AnoLancamento > DateTime.Now.Year)
+        {
+            throw new Exception("Não é possível cadastrar um ano de lançamento maior que o ano atual!");
+        }
+
         var updatedAnime = await _animeRepository.UpdateAsync(request, id) ?? throw new Exception("Anime não encontrado!");
         return MapToGetAnimeResponse(updatedAnime);
     }

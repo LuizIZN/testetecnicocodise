@@ -65,7 +65,12 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            if (ex.Message.Contains("encontrado"))
+            {
+                return NotFound(ex.Message);
+            }
+
+            return BadRequest(ex.Message);
         }
     }
 
