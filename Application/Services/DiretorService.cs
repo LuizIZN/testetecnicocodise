@@ -40,6 +40,26 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
         return MapToGetDiretorResponse(updatedDiretor);
     }
 
+    public async Task<GetAnimeDiretorResponse?> GetDiretorWithAnimesAsync(Guid id)
+    {
+        var diretor = await _diretorRepository.GetDiretorWithAnimesAsync(id) ?? throw new Exception("Diretor não encontrado.");
+        
+        return new GetAnimeDiretorResponse
+        {
+            Id = diretor.Id,
+            Nome = diretor.Nome,
+            DataNascimento = diretor.DataNascimento,
+            Animes = [.. diretor.Animes.Select(a => new GetAnimeLookup
+            {
+                Id = a.Id,
+                Nome = a.Nome,
+                Descricao = a.Descricao,
+                NumeroEpisodios = a.NumeroEpisodios,
+                AnoLancamento = a.AnoLancamento 
+            })]
+        };
+    }
+
     private static GetDiretorResponse MapToGetDiretorResponse(Diretor diretor)
     {
         return new GetDiretorResponse

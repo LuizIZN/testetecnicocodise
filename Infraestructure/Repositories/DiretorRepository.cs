@@ -53,4 +53,11 @@ public sealed class DiretorRepository(AppDbContext context) : IDiretorRepository
 
         return existingDiretor;
     }
+
+    public async Task<Diretor?> GetDiretorWithAnimesAsync(Guid id)
+    {
+        return await _context.Diretores
+            .Include(d => d.Animes)
+            .FirstOrDefaultAsync(d => d.Id == id);
+    }
 }

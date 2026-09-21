@@ -88,4 +88,18 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
             return BadRequest("O diretor está associado a um anime e não pode ser excluído.");
         }
     }
+
+    [HttpGet("{id}/animes")]
+    public async Task<ActionResult<GetAnimeDiretorResponse>> GetDiretorWithAnimes(Guid id)
+    {
+        try
+        {
+            var diretorWithAnimes = await _diretorService.GetDiretorWithAnimesAsync(id);
+            return Ok(diretorWithAnimes);
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 }

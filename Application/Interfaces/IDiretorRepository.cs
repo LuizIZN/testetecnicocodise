@@ -11,4 +11,5 @@ public interface IDiretorRepository
     Task<Diretor> AddAsync(CreateDiretorRequest diretor);
     Task<Diretor?> UpdateAsync(UpdateDiretorRequest diretor, Guid id);
     Task<Diretor?> DeleteAsync(Guid id);
+    Task<Diretor?> GetDiretorWithAnimesAsync(Guid id);
 }
