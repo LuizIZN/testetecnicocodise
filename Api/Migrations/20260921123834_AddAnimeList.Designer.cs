@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using TesteTecnico.Infraestructure.Data;
@@ -11,9 +12,11 @@ using TesteTecnico.Infraestructure.Data;
 namespace TesteTecnico.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260921123834_AddAnimeList")]
+    partial class AddAnimeList
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,6 +41,9 @@ namespace TesteTecnico.Migrations
                     b.Property<Guid>("DiretorId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid?>("DiretorId1")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasColumnType("text");
@@ -48,6 +54,8 @@ namespace TesteTecnico.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("DiretorId");
+
+                    b.HasIndex("DiretorId1");
 
                     b.ToTable("Animes");
                 });
@@ -73,10 +81,14 @@ namespace TesteTecnico.Migrations
             modelBuilder.Entity("TesteTecnico.Domain.Models.Anime", b =>
                 {
                     b.HasOne("TesteTecnico.Domain.Models.Diretor", "Diretor")
-                        .WithMany("Animes")
+                        .WithMany()
                         .HasForeignKey("DiretorId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("TesteTecnico.Domain.Models.Diretor", null)
+                        .WithMany("Animes")
+                        .HasForeignKey("DiretorId1");
 
                     b.Navigation("Diretor");
                 });
