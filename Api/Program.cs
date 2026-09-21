@@ -46,4 +46,16 @@ app.MapGet("/health-check", () =>
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    var context = services.GetRequiredService<AppDbContext>();
+    
+    var animeSeeder = new AnimeSeeder(context);
+    var diretorSeeder = new DiretorSeeder(context);
+
+    await diretorSeeder.SeedAsync();
+    await animeSeeder.SeedAsync();
+}
+
 app.Run();
