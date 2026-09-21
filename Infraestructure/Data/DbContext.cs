@@ -18,6 +18,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Anime>()
             .HasOne(a => a.Diretor)
             .WithMany()
-            .HasForeignKey(a => a.DiretorId);
+            .HasForeignKey(a => a.DiretorId)
+            .OnDelete(DeleteBehavior.Restrict);
     }
 }
