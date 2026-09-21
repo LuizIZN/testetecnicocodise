@@ -69,4 +69,19 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
             return NotFound(ex.Message);
         }
     }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult<string>> Delete(Guid id)
+    {
+        try
+        {
+            await _diretorService.DeleteAsync(id);
+
+            return Ok("Diretor excluído com sucesso!");
+        }
+        catch (Exception ex)
+        {
+            return NotFound(ex.Message);
+        }
+    }
 }
