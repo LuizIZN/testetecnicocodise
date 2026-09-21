@@ -35,8 +35,10 @@ if (app.Environment.IsDevelopment())
 
 }
 
-app.UseHttpsRedirection();
-
+if (app.Environment.IsProduction())
+{
+    app.UseHttpsRedirection();
+}
 
 app.MapGet("/health-check", () =>
 {
