@@ -31,23 +31,26 @@ public sealed class DiretorRepository(AppDbContext context) : IDiretorRepository
         return await _context.Diretores.FindAsync(id);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<Diretor?> DeleteAsync(Guid id)
     {
         var diretor = await _context.Diretores.FindAsync(id);
-        if (diretor != null)
-        {
-            _context.Diretores.Remove(diretor);
-            await _context.SaveChangesAsync();
-        }
+        if (diretor == null) return null;
+
+        _context.Diretores.Remove(diretor);
+        await _context.SaveChangesAsync();
+        return diretor;
     }
 
-    public async Task UpdateAsync(UpdateDiretorRequest request, Guid id)
+    public async Task<Diretor?> UpdateAsync(UpdateDiretorRequest request, Guid id)
     {
-        var diretor = await _context.Diretores.FirstOrDefaultAsync(d => d.Id == id) ?? throw new Exception("Diretor não encontrado.");
+        var existingDiretor = await _context.Diretores.FirstOrDefaultAsync(d => d.Id == id);
+        if (existingDiretor == null) return null;
 
-        var diretorToUpdate = new Diretor(Nome: request.Nome ?? diretor.Nome, DataNascimento: request.DataNascimento ?? diretor.DataNascimento);
+        var diretorToUpdate = new Diretor(Nome: request.Nome ?? existingDiretor.Nome, DataNascimento: request.DataNascimento ?? existingDiretor.DataNascimento);
 
-        diretor.Update(diretorToUpdate);
+        existingDiretor.Update(diretorToUpdate);
         await _context.SaveChangesAsync();
+
+        return existingDiretor;
     }
 }

@@ -28,14 +28,16 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
         return MapToGetDiretorResponse(diretor);
     }
 
-    public async Task DeleteAsync(Guid id)
+    public async Task<GetDiretorResponse?> DeleteAsync(Guid id)
     {
-        await _diretorRepository.DeleteAsync(id);
+        var deletedDiretor = await _diretorRepository.DeleteAsync(id) ?? throw new Exception("Diretor não encontrado para exclusão.");
+        return MapToGetDiretorResponse(deletedDiretor);
     }
 
-    public async Task UpdateAsync(UpdateDiretorRequest request, Guid id)
+    public async Task<GetDiretorResponse?> UpdateAsync(UpdateDiretorRequest request, Guid id)
     {
-        await _diretorRepository.UpdateAsync(request, id);
+        var updatedDiretor = await _diretorRepository.UpdateAsync(request, id) ?? throw new Exception("Diretor não encontrado para atualização.");
+        return MapToGetDiretorResponse(updatedDiretor);
     }
 
     private static GetDiretorResponse MapToGetDiretorResponse(Diretor diretor)
