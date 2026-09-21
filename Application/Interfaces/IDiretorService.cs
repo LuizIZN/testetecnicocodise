@@ -9,6 +9,6 @@ public interface IDiretorService
     Task<IEnumerable<GetDiretorResponse>> GetAllAsync();
     Task<GetDiretorResponse?> GetByIdAsync(Guid id);
     Task<GetDiretorResponse> AddAsync(CreateDiretorRequest diretor);
-    Task UpdateAsync(UpdateDiretorRequest diretor, Guid id);
-    Task DeleteAsync(Guid id);
+    Task<GetDiretorResponse?> UpdateAsync(UpdateDiretorRequest diretor, Guid id);
+    Task<GetDiretorResponse?> DeleteAsync(Guid id);
 }

@@ -9,6 +9,6 @@ public interface IDiretorRepository
     Task<IEnumerable<Diretor>> GetAllAsync();
     Task<Diretor?> GetByIdAsync(Guid id);
     Task<Diretor> AddAsync(CreateDiretorRequest diretor);
-    Task UpdateAsync(UpdateDiretorRequest diretor, Guid id);
-    Task DeleteAsync(Guid id);
+    Task<Diretor?> UpdateAsync(UpdateDiretorRequest diretor, Guid id);
+    Task<Diretor?> DeleteAsync(Guid id);
 }
