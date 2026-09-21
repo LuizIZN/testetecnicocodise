@@ -2,9 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using TesteTecnico.Api.Seeders;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Services;
-using TesteTecnico.Domain.Models;
 using TesteTecnico.Infraestructure.Data;
 using TesteTecnico.Infraestructure.Repositories;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -33,6 +33,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 if (app.Environment.IsProduction())
