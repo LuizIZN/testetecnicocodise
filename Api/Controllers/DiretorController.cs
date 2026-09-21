@@ -81,7 +81,11 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
         }
         catch (Exception ex)
         {
-            return NotFound(ex.Message);
+            if (ex.Message.Contains("não encontrado"))
+            {
+                return NotFound(ex.Message);
+            }
+            return BadRequest("O diretor está associado a um anime e não pode ser excluído.");
         }
     }
 }
