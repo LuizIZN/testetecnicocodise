@@ -11,9 +11,39 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<IEnumerable<Anime>> GetAllAsync()
+    public async Task<IEnumerable<Anime>> GetAllAsync(QueryAnimeParameters queryParameters)
     {
-        return await _context.Animes.Include(a => a.Diretor).ToListAsync();
+        var query = _context.Animes.AsQueryable();
+
+        if (!string.IsNullOrEmpty(queryParameters.Nome))
+        {
+            query = query.Where(a => a.Nome.Contains(queryParameters.Nome));
+        }
+
+        if (queryParameters.AnoLancamentoMin.HasValue)
+        {
+            query = query.Where(a => a.AnoLancamento >= queryParameters.AnoLancamentoMin.Value);
+        }
+
+        if (queryParameters.AnoLancamentoMax.HasValue)
+        {
+            query = query.Where(a => a.AnoLancamento <= queryParameters.AnoLancamentoMax.Value);
+        }
+
+        if (queryParameters.NumeroEpisodiosMin.HasValue)
+        {
+            query = query.Where(a => a.NumeroEpisodios >= queryParameters.NumeroEpisodiosMin.Value);
+        }
+
+        if (queryParameters.NumeroEpisodiosMax.HasValue)
+        {
+            query = query.Where(a => a.NumeroEpisodios <= queryParameters.NumeroEpisodiosMax.Value);
+        }
+
+        var pageNumber = Math.Max(queryParameters.PageNumber, 1);
+        var pageSize = Math.Clamp(queryParameters.PageSize, 1, 100);
+
+        return await query.Include(a => a.Diretor).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
     }
 
     public async Task<Anime?> GetByIdAsync(Guid id)

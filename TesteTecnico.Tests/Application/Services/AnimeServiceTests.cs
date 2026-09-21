@@ -166,7 +166,7 @@ public sealed class AnimeServiceTests
         public Anime? AnimeToDelete { get; init; }
         public CreateAnimeRequest? AddedRequest { get; private set; }
 
-        public Task<IEnumerable<Anime>> GetAllAsync() => Task.FromResult(Animes);
+        public Task<IEnumerable<Anime>> GetAllAsync(QueryAnimeParameters queryParameters) => Task.FromResult(Animes);
 
         public Task<Anime?> GetByIdAsync(Guid id) =>
             Task.FromResult(Animes.FirstOrDefault(anime => anime.Id == id));

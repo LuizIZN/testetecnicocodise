@@ -6,7 +6,7 @@ namespace TesteTecnico.Application.Interfaces;
 
 public interface IAnimeRepository
 {
-    Task<IEnumerable<Anime>> GetAllAsync();
+    Task<IEnumerable<Anime>> GetAllAsync(QueryAnimeParameters queryParameters);
     Task<Anime?> GetByIdAsync(Guid id);
     Task<Anime> AddAsync(CreateAnimeRequest anime);
     Task<Anime?> UpdateAsync(UpdateAnimeRequest request, Guid id);

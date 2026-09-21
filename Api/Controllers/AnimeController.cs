@@ -2,7 +2,6 @@ namespace TesteTecnico.Api.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Dtos;
-using TesteTecnico.Domain.Models;
 using TesteTecnico.Application.Dtos.Anime;
 
 [ApiController]
@@ -41,11 +40,11 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetAnimeResponse>>> GetAll()
+    public async Task<ActionResult<IEnumerable<GetAnimeResponse>>> GetAll([FromQuery] QueryAnimeParameters queryParams)
     {
         try
         {
-            var animes = await _animeService.GetAllAsync();
+            var animes = await _animeService.GetAllAsync(queryParams);
 
             return Ok(animes);
         }
