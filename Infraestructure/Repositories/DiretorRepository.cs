@@ -21,9 +21,33 @@ public sealed class DiretorRepository(AppDbContext context) : IDiretorRepository
         return newDiretor;
     }
 
-    public async Task<IEnumerable<Diretor>> GetAllAsync()
+    public async Task<GetAllType<Diretor>> GetAllAsync(QueryDiretorParams queryParameters)
     {
-        return await _context.Diretores.ToListAsync();
+        var query = _context.Diretores.AsQueryable();
+
+        if (!string.IsNullOrEmpty(queryParameters.Nome))
+        {
+            query = query.Where(d => d.Nome.ToLower().Contains(queryParameters.Nome.ToLower()));
+        }
+
+        var pageNumber = Math.Max(queryParameters.PageNumber, 1);
+        var pageSize = Math.Clamp(queryParameters.PageSize, 1, 100);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(d => d.Nome)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var response = new GetAllType<Diretor>
+        {
+            Items = items,
+            TotalCount = totalCount,
+        };
+
+        return response;
     }
 
     public async Task<Diretor?> GetByIdAsync(Guid id)

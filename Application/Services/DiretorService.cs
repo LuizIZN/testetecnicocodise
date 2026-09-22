@@ -16,10 +16,19 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
         return MapToGetDiretorResponse(diretor);
     }
 
-    public async Task<IEnumerable<GetDiretorResponse>> GetAllAsync()
+    public async Task<QueryResponse<GetDiretorResponse>> GetAllAsync(QueryDiretorParams queryParameters)
     {
-        var diretores = await _diretorRepository.GetAllAsync() ?? throw new Exception("Nenhum diretor encontrado!");
-        return diretores.Select(MapToGetDiretorResponse);
+        var diretores = await _diretorRepository.GetAllAsync(queryParameters) ?? throw new Exception("Nenhum diretor encontrado!");
+        
+        var queryResponse = new QueryResponse<GetDiretorResponse>
+        {
+            Items = diretores.Items.Select(MapToGetDiretorResponse),
+            TotalCount = diretores.TotalCount,
+            PageNumber = queryParameters.PageNumber,
+            PageSize = queryParameters.PageSize
+        };
+
+        return queryResponse;
     }
 
     public async Task<GetDiretorResponse?> GetByIdAsync(Guid id)

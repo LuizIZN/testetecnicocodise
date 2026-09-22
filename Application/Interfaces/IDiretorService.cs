@@ -6,7 +6,7 @@ namespace TesteTecnico.Application.Interfaces;
 
 public interface IDiretorService
 {
-    Task<IEnumerable<GetDiretorResponse>> GetAllAsync();
+    Task<QueryResponse<GetDiretorResponse>> GetAllAsync(QueryDiretorParams queryParameters);
     Task<GetDiretorResponse?> GetByIdAsync(Guid id);
     Task<GetDiretorResponse> AddAsync(CreateDiretorRequest diretor);
     Task<GetDiretorResponse?> UpdateAsync(UpdateDiretorRequest diretor, Guid id);

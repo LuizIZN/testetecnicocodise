@@ -41,11 +41,11 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetDiretorResponse>>> GetAll()
+    public async Task<ActionResult<QueryResponse<GetDiretorResponse>>> GetAll([FromQuery] QueryDiretorParams queryParams)
     {
         try
         {
-            var diretores = await _diretorService.GetAllAsync();
+            var diretores = await _diretorService.GetAllAsync(queryParams);
 
             return Ok(diretores);
         }

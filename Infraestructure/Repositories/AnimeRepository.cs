@@ -51,13 +51,13 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
             .Take(pageSize)
             .ToListAsync();
 
-        var getAllType = new GetAllType<Anime>
+        var response = new GetAllType<Anime>
         {
             Items = items,
             TotalCount = totalCount,
         };
 
-        return getAllType;
+        return response;
     }
 
     public async Task<Anime?> GetByIdAsync(Guid id)
