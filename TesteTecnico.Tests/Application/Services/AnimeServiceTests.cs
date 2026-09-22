@@ -17,9 +17,9 @@ public sealed class AnimeServiceTests
         var anime = CreateAnime(diretor);
         var service = new AnimeService(
             new FakeAnimeRepository { Animes = [anime] },
-            new FakeDiretorRepository());
+            new FakeDiretorRepository { Diretores = [diretor] });
 
-        var result = (await service.GetAllAsync()).Single();
+        var result = (await service.GetAllAsync(new QueryAnimeParameters())).Items.Single();
 
         Assert.Equal(anime.Id, result.Id);
         Assert.Equal(anime.Nome, result.Nome);
@@ -46,7 +46,7 @@ public sealed class AnimeServiceTests
         var diretor = CreateDirector();
         var anime = CreateAnime(diretor);
         var animeRepository = new FakeAnimeRepository { AnimeToAdd = anime };
-        var diretorRepository = new FakeDiretorRepository { Director = diretor };
+        var diretorRepository = new FakeDiretorRepository { Diretor = diretor };
         var service = new AnimeService(animeRepository, diretorRepository);
         var request = new CreateAnimeRequest
         {
@@ -166,7 +166,11 @@ public sealed class AnimeServiceTests
         public Anime? AnimeToDelete { get; init; }
         public CreateAnimeRequest? AddedRequest { get; private set; }
 
-        public Task<IEnumerable<Anime>> GetAllAsync(QueryAnimeParameters queryParameters) => Task.FromResult(Animes);
+        public Task<GetAllType<Anime>> GetAllAsync(QueryAnimeParameters queryParameters) => Task.FromResult(new GetAllType<Anime>
+        {
+            Items = Animes,
+            TotalCount = Animes.Count()
+        });
 
         public Task<Anime?> GetByIdAsync(Guid id) =>
             Task.FromResult(Animes.FirstOrDefault(anime => anime.Id == id));
@@ -186,16 +190,21 @@ public sealed class AnimeServiceTests
 
     private sealed class FakeDiretorRepository : IDiretorRepository
     {
-        public Diretor? Director { get; init; }
+        public IEnumerable<Diretor> Diretores { get; init; } = [];
+        public Diretor? Diretor { get; init; }
         public Guid RequestedId { get; private set; }
 
         public Task<Diretor?> GetByIdAsync(Guid id)
         {
             RequestedId = id;
-            return Task.FromResult(Director);
+            return Task.FromResult(Diretor);
         }
 
-        public Task<IEnumerable<Diretor>> GetAllAsync() => Task.FromResult<IEnumerable<Diretor>>([]);
+        public Task<GetAllType<Diretor>> GetAllAsync(QueryDiretorParams queryParameters) => Task.FromResult(new GetAllType<Diretor>
+        {
+            Items = Diretores,
+            TotalCount = Diretores.Count()
+        });
         public Task<Diretor> AddAsync(CreateDiretorRequest request) => throw new NotSupportedException();
         public Task<Diretor?> UpdateAsync(UpdateDiretorRequest request, Guid id) => throw new NotSupportedException();
         public Task<Diretor?> DeleteAsync(Guid id) => throw new NotSupportedException();

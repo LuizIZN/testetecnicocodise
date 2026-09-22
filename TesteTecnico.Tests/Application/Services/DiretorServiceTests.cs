@@ -34,7 +34,7 @@ public sealed class DiretorServiceTests
         var repository = new FakeDiretorRepository { Directors = [diretor] };
         var service = new DiretorService(repository);
 
-        var result = (await service.GetAllAsync()).Single();
+        var result = (await service.GetAllAsync(new QueryDiretorParams())).Items.Single();
 
         Assert.Equal(diretor.Id, result.Id);
         Assert.Equal(diretor.Nome, result.Nome);
@@ -92,7 +92,11 @@ public sealed class DiretorServiceTests
             return Task.FromResult(AddedDiretor);
         }
 
-        public Task<IEnumerable<Diretor>> GetAllAsync() => Task.FromResult(Directors);
+        public Task<GetAllType<Diretor>> GetAllAsync(QueryDiretorParams queryParameters) => Task.FromResult(new GetAllType<Diretor>
+        {
+            Items = Directors,
+            TotalCount = Directors.Count()
+        });
 
         public Task<Diretor?> GetByIdAsync(Guid id) =>
             Task.FromResult(Directors.FirstOrDefault(diretor => diretor.Id == id));
