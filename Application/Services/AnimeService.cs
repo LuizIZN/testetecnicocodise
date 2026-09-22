@@ -10,11 +10,19 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
     private readonly IAnimeRepository _animeRepository = animeRepository;
     private readonly IDiretorRepository _diretorRepository = diretorRepository;
 
-    public async Task<IEnumerable<GetAnimeResponse>> GetAllAsync(QueryAnimeParameters queryParameters)
+    public async Task<QueryResponse<GetAnimeResponse>> GetAllAsync(QueryAnimeParameters queryParameters)
     {
         var animes = await _animeRepository.GetAllAsync(queryParameters) ?? throw new Exception("Nenhum anime encontrado!");
 
-        return animes.Select(MapToGetAnimeResponse);
+        var queryResponse = new QueryResponse<GetAnimeResponse>
+        {
+            Items = animes.Items.Select(MapToGetAnimeResponse),
+            TotalCount = animes.TotalCount,
+            PageNumber = queryParameters.PageNumber,
+            PageSize = queryParameters.PageSize
+        };
+
+        return queryResponse;
     }
 
     public async Task<GetAnimeResponse?> GetByIdAsync(Guid id)

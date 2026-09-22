@@ -40,7 +40,7 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<GetAnimeResponse>>> GetAll([FromQuery] QueryAnimeParameters queryParams)
+    public async Task<ActionResult<QueryResponse<GetAnimeResponse>>> GetAll([FromQuery] QueryAnimeParameters queryParams)
     {
         try
         {

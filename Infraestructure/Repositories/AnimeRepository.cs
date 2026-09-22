@@ -11,13 +11,13 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
 {
     private readonly AppDbContext _context = context;
 
-    public async Task<IEnumerable<Anime>> GetAllAsync(QueryAnimeParameters queryParameters)
+    public async Task<GetAllType<Anime>> GetAllAsync(QueryAnimeParameters queryParameters)
     {
         var query = _context.Animes.AsQueryable();
 
         if (!string.IsNullOrEmpty(queryParameters.Nome))
         {
-            query = query.Where(a => a.Nome.Contains(queryParameters.Nome));
+            query = query.Where(a => a.Nome.ToLower().Contains(queryParameters.Nome.ToLower()));
         }
 
         if (queryParameters.AnoLancamentoMin.HasValue)
@@ -43,7 +43,21 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
         var pageNumber = Math.Max(queryParameters.PageNumber, 1);
         var pageSize = Math.Clamp(queryParameters.PageSize, 1, 100);
 
-        return await query.Include(a => a.Diretor).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
+        var totalCount = await query.CountAsync();
+
+        var items = await query.Include(a => a.Diretor)
+            .OrderBy(a => a.Nome)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        var getAllType = new GetAllType<Anime>
+        {
+            Items = items,
+            TotalCount = totalCount,
+        };
+
+        return getAllType;
     }
 
     public async Task<Anime?> GetByIdAsync(Guid id)
