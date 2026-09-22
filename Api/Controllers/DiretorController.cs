@@ -77,7 +77,7 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
         {
             await _diretorService.DeleteAsync(id);
 
-            return Ok("Diretor excluído com sucesso!");
+            return NoContent();
         }
         catch (Exception ex)
         {

@@ -37,10 +37,9 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
         return MapToGetDiretorResponse(diretor);
     }
 
-    public async Task<GetDiretorResponse?> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        var deletedDiretor = await _diretorRepository.DeleteAsync(id) ?? throw new Exception("Diretor não encontrado para exclusão.");
-        return MapToGetDiretorResponse(deletedDiretor);
+        _ = await _diretorRepository.DeleteAsync(id) ?? throw new Exception("Diretor não encontrado para exclusão.");
     }
 
     public async Task<GetDiretorResponse?> UpdateAsync(UpdateDiretorRequest request, Guid id)

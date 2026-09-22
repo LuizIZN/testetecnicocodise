@@ -78,7 +78,8 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
     {
         try
         {
-            _ = await _animeService.DeleteAsync(id);
+            await _animeService.DeleteAsync(id);
+
             return NoContent();
         }
         catch (Exception ex)

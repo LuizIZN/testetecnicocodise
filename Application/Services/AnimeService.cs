@@ -71,10 +71,9 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
         return MapToGetAnimeResponse(updatedAnime);
     }
 
-    public async Task<GetAnimeResponse?> DeleteAsync(Guid id)
+    public async Task DeleteAsync(Guid id)
     {
-        var deletedAnime = await _animeRepository.DeleteAsync(id) ?? throw new Exception("Anime não encontrado!");
-        return MapToGetAnimeResponse(deletedAnime);
+        _ = await _animeRepository.DeleteAsync(id) ?? throw new Exception("Anime não encontrado!");
     }
 
     private static GetAnimeResponse MapToGetAnimeResponse(Anime anime)

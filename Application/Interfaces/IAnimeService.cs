@@ -9,5 +9,5 @@ public interface IAnimeService
     Task<GetAnimeResponse?> GetByIdAsync(Guid id);
     Task<GetAnimeResponse> AddAsync(CreateAnimeRequest anime);
     Task<GetAnimeResponse?> UpdateAsync(UpdateAnimeRequest request, Guid id);
-    Task<GetAnimeResponse?> DeleteAsync(Guid id);
+    Task DeleteAsync(Guid id);
 }
