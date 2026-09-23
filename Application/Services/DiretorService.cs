@@ -1,3 +1,4 @@
+using TesteTecnico.Application.Common;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Application.Interfaces;
@@ -11,6 +12,22 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
 
     public async Task<GetDiretorResponse> AddAsync(CreateDiretorRequest request)
     {
+        List<string> errors = [];
+        if (string.IsNullOrWhiteSpace(request.Nome))
+        {
+            errors.Add("O campo nome é obrigatório!");
+        }
+
+        if (request.DataNascimento > DateOnly.FromDateTime(DateTime.Now))
+        {
+            errors.Add("Não é possível cadastrar uma data de nascimento maior que a data atual!");
+        }
+
+        if (errors.Count != 0)
+        {
+            throw new Error(400, "Erro de validação.", errors);
+        }
+
         var diretor = await _diretorRepository.AddAsync(request); 
 
         return MapToGetDiretorResponse(diretor);
@@ -18,7 +35,7 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
 
     public async Task<QueryResponse<GetDiretorResponse>> GetAllAsync(QueryDiretorParams queryParameters)
     {
-        var diretores = await _diretorRepository.GetAllAsync(queryParameters) ?? throw new Exception("Nenhum diretor encontrado!");
+        var diretores = await _diretorRepository.GetAllAsync(queryParameters) ?? throw new Error(404, "Nenhum diretor encontrado!", []);
         
         var queryResponse = new QueryResponse<GetDiretorResponse>
         {
@@ -33,24 +50,24 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
 
     public async Task<GetDiretorResponse?> GetByIdAsync(Guid id)
     {
-        var diretor = await _diretorRepository.GetByIdAsync(id) ?? throw new Exception("Diretor não encontrado");
+        var diretor = await _diretorRepository.GetByIdAsync(id) ?? throw new Error(404, "Diretor não encontrado", []);
         return MapToGetDiretorResponse(diretor);
     }
 
     public async Task DeleteAsync(Guid id)
     {
-        _ = await _diretorRepository.DeleteAsync(id) ?? throw new Exception("Diretor não encontrado para exclusão.");
+        _ = await _diretorRepository.DeleteAsync(id) ?? throw new Error(404, "Diretor não encontrado para exclusão.", []);
     }
 
     public async Task<GetDiretorResponse?> UpdateAsync(UpdateDiretorRequest request, Guid id)
     {
-        var updatedDiretor = await _diretorRepository.UpdateAsync(request, id) ?? throw new Exception("Diretor não encontrado para atualização.");
+        var updatedDiretor = await _diretorRepository.UpdateAsync(request, id) ?? throw new Error(404, "Diretor não encontrado para atualização.", []);
         return MapToGetDiretorResponse(updatedDiretor);
     }
 
     public async Task<GetAnimeDiretorResponse?> GetDiretorWithAnimesAsync(Guid id)
     {
-        var diretor = await _diretorRepository.GetDiretorWithAnimesAsync(id) ?? throw new Exception("Diretor não encontrado.");
+        var diretor = await _diretorRepository.GetDiretorWithAnimesAsync(id) ?? throw new Error(404, "Diretor não encontrado.", []);
         
         return new GetAnimeDiretorResponse
         {

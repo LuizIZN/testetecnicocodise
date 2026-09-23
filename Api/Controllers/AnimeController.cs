@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Anime;
+using TesteTecnico.Application.Common;
 
 [ApiController]
 [Route("anime")]
@@ -19,9 +20,9 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result.Id);
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return BadRequest(ex.Message);
+            return err.MapErrorMessage<Guid>();
         }
     } 
 
@@ -33,9 +34,9 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
             var anime = await _animeService.GetByIdAsync(id);
             return Ok(anime);
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return NotFound(ex.Message);
+            return err.MapErrorMessage<GetAnimeResponse>();
         }
     }
 
@@ -48,9 +49,9 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
 
             return Ok(animes);
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return NotFound(ex.Message);
+            return err.MapErrorMessage<QueryResponse<GetAnimeResponse>>();
         }
     }
 
@@ -62,19 +63,14 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
             _ = await _animeService.UpdateAsync(request, id);
             return CreatedAtAction(nameof(GetById), new { id }, "Anime atualizado com sucesso!");
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            if (ex.Message.Contains("encontrado"))
-            {
-                return NotFound(ex.Message);
-            }
-
-            return BadRequest(ex.Message);
+            return err.MapErrorMessage<string>();
         }
     }
 
     [HttpDelete("{id}")]
-    public async Task<ActionResult> Delete(Guid id)
+    public async Task<ActionResult<string>> Delete(Guid id)
     {
         try
         {
@@ -82,9 +78,9 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
 
             return NoContent();
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return NotFound(ex.Message);
+            return err.MapErrorMessage<string>();
         }
     }
 }

@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using TesteTecnico.Application.Common;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Application.Interfaces;
@@ -20,9 +21,9 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result.Id);
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return BadRequest(ex.Message);
+            return err.MapErrorMessage<Guid>();
         }
     }
 
@@ -34,9 +35,9 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
             var diretor = await _diretorService.GetByIdAsync(id);
             return Ok(diretor);
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return NotFound(ex.Message);
+            return err.MapErrorMessage<GetDiretorResponse>();
         }
     }
 
@@ -49,9 +50,9 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
 
             return Ok(diretores);
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return NotFound(ex.Message);
+            return err.MapErrorMessage<QueryResponse<GetDiretorResponse>>();
         }
     }
     
@@ -64,9 +65,9 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
 
             return CreatedAtAction(nameof(GetById), new { id }, "Diretor atualizado com sucesso!");
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return NotFound(ex.Message);
+            return err.MapErrorMessage<string>();
         }
     }
 
@@ -79,13 +80,9 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
 
             return NoContent();
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            if (ex.Message.Contains("não encontrado"))
-            {
-                return NotFound(ex.Message);
-            }
-            return BadRequest("O diretor está associado a um anime e não pode ser excluído.");
+            return err.MapErrorMessage<string>();
         }
     }
 
@@ -97,9 +94,9 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
             var diretorWithAnimes = await _diretorService.GetDiretorWithAnimesAsync(id);
             return Ok(diretorWithAnimes);
         }
-        catch (Exception ex)
+        catch (Error err)
         {
-            return NotFound(ex.Message);
+            return err.MapErrorMessage<GetAnimeDiretorResponse>();
         }
     }
 }
