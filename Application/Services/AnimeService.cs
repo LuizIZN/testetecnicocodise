@@ -81,7 +81,8 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
         }
 
         var updatedAnime = await _animeRepository.UpdateAsync(request, id) ?? throw new Error(404, "Anime não encontrado.", []);
-        return MapToGetAnimeResponse(updatedAnime);
+        var anime = await _animeRepository.GetByIdAsync(updatedAnime.Id) ?? throw new Error(404, "Anime não encontrado.", []);
+        return MapToGetAnimeResponse(anime);
     }
 
     public async Task DeleteAsync(Guid id)

@@ -60,7 +60,7 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
     {
         try
         {
-            _ = await _animeService.UpdateAsync(request, id);
+            await _animeService.UpdateAsync(request, id);
             return CreatedAtAction(nameof(GetById), new { id }, "Anime atualizado com sucesso!");
         }
         catch (Error err)
