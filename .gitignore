@@ -26,6 +26,8 @@ bld/
 appsettings.json
 appsettings.Development.json
 
+init.sql
+
 # .NET Core
 project.lock.json
 project.fragment.lock.json
