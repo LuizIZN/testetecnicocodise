@@ -24,7 +24,7 @@ bld/
 [Ll]ogs/
 
 appsettings.json
-appsettings.*.json
+appsettings.Development.json
 
 # .NET Core
 project.lock.json
