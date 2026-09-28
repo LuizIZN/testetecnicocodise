@@ -14,7 +14,7 @@ services:
   api:
     build:
       context: .
-      dockerfile: Api/Dockerfile
+      dockerfile: Dockerfile
     container_name: api-animes
     environment:
       DB_USER: ${DB_USER}
