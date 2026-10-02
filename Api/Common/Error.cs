@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 
-namespace TesteTecnico.Application.Common;
+namespace TesteTecnico.Api.Common;
 
 public class Error(int code, string message, List<string>? errors) : Exception(message)
 {

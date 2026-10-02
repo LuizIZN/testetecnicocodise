@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using TesteTecnico.Application.Common;
+using TesteTecnico.Api.Common;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Application.Interfaces;

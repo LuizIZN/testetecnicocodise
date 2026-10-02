@@ -1,4 +1,4 @@
-using TesteTecnico.Application.Common;
+using TesteTecnico.Api.Common;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Anime;
 using TesteTecnico.Application.Interfaces;

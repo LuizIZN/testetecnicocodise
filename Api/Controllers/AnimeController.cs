@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Anime;
-using TesteTecnico.Application.Common;
+using TesteTecnico.Api.Common;
 
 [ApiController]
 [Route("anime")]
