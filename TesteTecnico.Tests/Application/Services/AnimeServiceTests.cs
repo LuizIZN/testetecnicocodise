@@ -122,17 +122,13 @@ public sealed class AnimeServiceTests
     }
 
     [Fact]
-    public async Task DeleteAsync_WhenAnimeExists_ReturnsMappedAnime()
+    public async Task DeleteAsync_WhenAnimeExists_CompletesSuccessfully()
     {
         var diretor = CreateDirector();
         var anime = CreateAnime(diretor);
         var service = CreateService(new FakeAnimeRepository { AnimeToDelete = anime });
 
-        var result = await service.DeleteAsync(anime.Id);
-
-        Assert.NotNull(result);
-        Assert.Equal(anime.Id, result.Id);
-        Assert.Equal(anime.Nome, result.Nome);
+        await service.DeleteAsync(anime.Id);
     }
 
     private static AnimeService CreateService(FakeAnimeRepository? animeRepository = null)
