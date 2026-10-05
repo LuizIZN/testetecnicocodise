@@ -4,6 +4,7 @@ using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Anime;
 using TesteTecnico.Api.Common;
+using FluentValidation;
 
 [ApiController]
 [Route("anime")]
@@ -12,8 +13,16 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
     private readonly IAnimeService _animeService = animeService;
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create(CreateAnimeRequest request)
+    public async Task<ActionResult<Guid>> Create(CreateAnimeRequest request, IValidator<CreateAnimeRequest> validator)
     {
+        var validation = await validator.ValidateAsync(request);
+
+        if (!validation.IsValid)
+        {
+            var errors = validation.ToDictionary();
+            return BadRequest(new ValidationProblemDetails(errors));
+        }
+
         try
         {
             var result = await _animeService.AddAsync(request);
@@ -41,8 +50,17 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<QueryResponse<GetAnimeResponse>>> GetAll([FromQuery] QueryAnimeParameters queryParams)
+    public async Task<ActionResult<QueryResponse<GetAnimeResponse>>> GetAll(
+        [FromQuery] QueryAnimeParameters queryParams,
+        IValidator<QueryAnimeParameters> validator)
     {
+        var validation = await validator.ValidateAsync(queryParams);
+
+        if (!validation.IsValid)
+        {
+            return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
+        }
+
         try
         {
             var animes = await _animeService.GetAllAsync(queryParams);
@@ -56,8 +74,15 @@ public sealed class AnimeController(IAnimeService animeService) : ControllerBase
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult<string>> Update(Guid id, UpdateAnimeRequest request)
+    public async Task<ActionResult<string>> Update(Guid id, UpdateAnimeRequest request, IValidator<UpdateAnimeRequest> validator)
     {
+        var validation = await validator.ValidateAsync(request);
+
+        if (!validation.IsValid)
+        {
+            return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
+        }
+
         try
         {
             await _animeService.UpdateAsync(request, id);

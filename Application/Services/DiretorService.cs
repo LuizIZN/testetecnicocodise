@@ -56,7 +56,13 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
 
     public async Task DeleteAsync(Guid id)
     {
-        _ = await _diretorRepository.DeleteAsync(id) ?? throw new Error(404, "Diretor não encontrado para exclusão.", []);
+        var animesDiretor = await _diretorRepository.GetDiretorWithAnimesAsync(id) ?? throw new Error(404, "Diretor não encontrado para exclusão.", []);
+        if (animesDiretor.Animes.Count != 0)
+        {
+            throw new Error(400, "Não é possível excluir o diretor, pois ele possui animes associados.", ["Não é possível excluir o diretor, pois ele possui animes associados."]);
+        }
+
+        _ = await _diretorRepository.DeleteAsync(id);
     }
 
     public async Task<GetDiretorResponse?> UpdateAsync(UpdateDiretorRequest request, Guid id)

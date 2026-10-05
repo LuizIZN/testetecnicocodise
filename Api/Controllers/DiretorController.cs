@@ -3,6 +3,7 @@ using TesteTecnico.Api.Common;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Application.Interfaces;
+using FluentValidation;
 
 namespace TesteTecnico.Api.Controllers;
 
@@ -13,8 +14,15 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
     private readonly IDiretorService _diretorService = diretorService;
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create(CreateDiretorRequest request)
+    public async Task<ActionResult<Guid>> Create(CreateDiretorRequest request, IValidator<CreateDiretorRequest> validator)
     {
+        var validation = await validator.ValidateAsync(request);
+
+        if (!validation.IsValid)
+        {
+            return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
+        }
+
         try
         {
             var result = await _diretorService.AddAsync(request);
@@ -42,8 +50,17 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
     }
 
     [HttpGet]
-    public async Task<ActionResult<QueryResponse<GetDiretorResponse>>> GetAll([FromQuery] QueryDiretorParams queryParams)
+    public async Task<ActionResult<QueryResponse<GetDiretorResponse>>> GetAll(
+        [FromQuery] QueryDiretorParams queryParams,
+        IValidator<QueryDiretorParams> validator)
     {
+        var validation = await validator.ValidateAsync(queryParams);
+
+        if (!validation.IsValid)
+        {
+            return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
+        }
+
         try
         {
             var diretores = await _diretorService.GetAllAsync(queryParams);
@@ -57,8 +74,15 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
     }
     
     [HttpPatch("{id}")]
-    public async Task<ActionResult<string>> Update(Guid id, UpdateDiretorRequest request)
+    public async Task<ActionResult<string>> Update(Guid id, UpdateDiretorRequest request, IValidator<UpdateDiretorRequest> validator)
     {
+        var validation = await validator.ValidateAsync(request);
+
+        if (!validation.IsValid)
+        {
+            return BadRequest(new ValidationProblemDetails(validation.ToDictionary()));
+        }
+
         try
         {
             await _diretorService.UpdateAsync(request, id);

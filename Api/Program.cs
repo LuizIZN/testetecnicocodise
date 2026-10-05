@@ -5,6 +5,8 @@ using TesteTecnico.Application.Services;
 using TesteTecnico.Infraestructure.Data;
 using TesteTecnico.Infraestructure.Repositories;
 using Scalar.AspNetCore;
+using FluentValidation;
+using TesteTecnico.Application.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +28,7 @@ builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
 builder.Services.AddScoped<IDiretorRepository, DiretorRepository>();
 builder.Services.AddScoped<IDiretorService, DiretorService>();
 
+builder.Services.AddValidatorsFromAssemblyContaining<CreateAnimeValidator>();
 
 var app = builder.Build();
 
