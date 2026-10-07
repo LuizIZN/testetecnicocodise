@@ -10,6 +10,7 @@
     <Compile Include="..\Application\**\*.cs" />
     <Compile Include="..\Domain\**\*.cs" />
     <Compile Include="..\Infraestructure\**\*.cs" />
+    <PackageReference Include="ColorlibHQ.AdminLTE.AspNetCore" Version="0.3.1" />
     <PackageReference Include="FluentValidation" Version="12.1.1" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
 

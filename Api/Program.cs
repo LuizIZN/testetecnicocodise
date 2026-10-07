@@ -7,8 +7,9 @@ using TesteTecnico.Infraestructure.Repositories;
 using Scalar.AspNetCore;
 using FluentValidation;
 using TesteTecnico.Application.Validators;
+using ColorlibHQ.AdminLTE.AspNetCore;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder();
 
 // Add services to the container.
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
@@ -29,6 +30,21 @@ builder.Services.AddScoped<IDiretorRepository, DiretorRepository>();
 builder.Services.AddScoped<IDiretorService, DiretorService>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateAnimeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateAnimeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<CreateDiretorValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateDiretorValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<QueryAnimeValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<QueryDiretorValidator>();
+
+builder.Services.AddRazorComponents()
+    .AddAdminLTE(options =>
+    {
+        options.BrandText = "Teste Técnico";
+        options.BrandImageUrl = "/images/logo.png";
+        options.BrandImageAlt = "Logo";
+        options.BrandImageClass = "brand-image img-circle elevation-3";
+        options.BrandImageStyle = "opacity: .8";
+    });
 
 var app = builder.Build();
 
