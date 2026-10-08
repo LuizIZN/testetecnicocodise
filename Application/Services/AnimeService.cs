@@ -20,7 +20,7 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
             Items = animes.Items.Select(MapToGetAnimeResponse),
             TotalCount = animes.TotalCount,
             PageNumber = queryParameters.PageNumber,
-            PageSize = queryParameters.PageSize
+            PageSize = queryParameters.PageSize <= animes.TotalCount ? queryParameters.PageSize : animes.TotalCount
         };
 
         return queryResponse;

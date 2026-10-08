@@ -42,7 +42,7 @@ public sealed class DiretorService(IDiretorRepository diretorRepository) : IDire
             Items = diretores.Items.Select(MapToGetDiretorResponse),
             TotalCount = diretores.TotalCount,
             PageNumber = queryParameters.PageNumber,
-            PageSize = queryParameters.PageSize
+            PageSize = queryParameters.PageSize < diretores.TotalCount ? queryParameters.PageSize : diretores.TotalCount
         };
 
         return queryResponse;

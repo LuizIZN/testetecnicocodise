@@ -36,16 +36,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<UpdateDiretorValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<QueryAnimeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<QueryDiretorValidator>();
 
-builder.Services.AddRazorComponents()
-    .AddAdminLTE(options =>
-    {
-        options.BrandText = "Teste Técnico";
-        options.BrandImageUrl = "/images/logo.png";
-        options.BrandImageAlt = "Logo";
-        options.BrandImageClass = "brand-image img-circle elevation-3";
-        options.BrandImageStyle = "opacity: .8";
-    });
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
