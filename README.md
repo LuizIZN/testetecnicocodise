@@ -1,10 +1,10 @@
 # Anime API
 
-API para cadastro e consulta de animes e diretores, com filtros, paginação e relacionamento entre as entidades.
+API para cadastro e consulta de animes e diretores, com filtros, paginação e relacionamento entre as entidades. A aplicação também disponibiliza uma página inicial MVC com Razor Views estilizada com AdminLTE.
 
 ## Tecnologias
 
-- .NET 10 / ASP.NET Core
+- .NET 10 / ASP.NET Core MVC
 - Entity Framework Core
 - PostgreSQL
 - xUnit
@@ -38,7 +38,7 @@ A API fica disponível em:
 - `http://localhost:5126`
 - `https://localhost:7190`
 
-Em ambiente de desenvolvimento, a documentação está disponível em `/swagger` e `/scalar`.
+Em ambiente de desenvolvimento, a documentação está disponível em `/swagger` e `/scalar`. A página inicial Razor Views com AdminLTE fica disponível em `/`.
 
 Os dados iniciais são inseridos automaticamente quando a aplicação é iniciada.
 

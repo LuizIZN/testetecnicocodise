@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Anime API</title>
+    <adminlte-styles></adminlte-styles>
+</head>
+<body class="layout-fixed">
+    <div class="app-wrapper">
+        <nav class="app-header navbar navbar-expand bg-body">
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Anime API</a>
+            </div>
+        </nav>
+
+        <aside class="app-sidebar bg-body-primary shadow" data-bs-theme="light">
+            <adminlte-sidebar></adminlte-sidebar>
+        </aside>
+
+        <main class="app-main">
+            <div class="app-content">
+                <div class="container-fluid py-3">
+                    @RenderBody()
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <adminlte-scripts></adminlte-scripts>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

@@ -8,7 +8,7 @@ using FluentValidation;
 
 [ApiController]
 [Route("anime")]
-public sealed class AnimeController(IAnimeService animeService) : ControllerBase
+public sealed class AnimeController(IAnimeService animeService) : Controller
 {
     private readonly IAnimeService _animeService = animeService;
 

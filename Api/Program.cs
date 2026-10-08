@@ -8,6 +8,7 @@ using Scalar.AspNetCore;
 using FluentValidation;
 using TesteTecnico.Application.Validators;
 using ColorlibHQ.AdminLTE.AspNetCore;
+using ColorlibHQ.AdminLTE.AspNetCore.Menu;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -22,7 +23,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllers();
+builder.Services.AddControllersWithViews();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
@@ -35,6 +37,20 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateDiretorValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateDiretorValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<QueryAnimeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<QueryDiretorValidator>();
+
+builder.Services.AddAdminLte(options =>
+{
+    options.BrandText = "Animes API";
+    options.SidebarTheme = "dark";
+    options.DefaultColorMode = "auto";
+    options.Menu = new List<MenuItem>
+    {
+        new() { Header = "Navegação" },
+        new() { Text = "Dashboard", Url = "/", Icon = "bi bi-speedometer" },
+        new() { Text = "Animes", Url = "/animes", Icon = "bi bi-film" },
+        new() { Text = "Diretores", Url = "/diretores", Icon = "bi bi-person" },
+    };
+});
 
 var app = builder.Build();
 
@@ -74,5 +90,12 @@ using (var scope = app.Services.CreateScope())
     await diretorSeeder.SeedAsync();
     await animeSeeder.SeedAsync();
 }
+
+app.UseStaticFiles();
+app.UseRouting();
+app.UseAntiforgery();
+app.MapControllerRoute(
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
