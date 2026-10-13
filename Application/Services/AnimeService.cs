@@ -98,6 +98,7 @@ public sealed class AnimeService(IAnimeRepository animeRepository, IDiretorRepos
             Nome = anime.Nome,
             AnoLancamento = anime.AnoLancamento,
             NumeroEpisodios = anime.NumeroEpisodios,
+            ImageUrl = anime.ImageUrl,
             Diretor = new GetDiretorResponse
             {
                 Id = anime.Diretor.Id,

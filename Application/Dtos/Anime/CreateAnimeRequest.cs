@@ -7,4 +7,6 @@ public sealed class CreateAnimeRequest
     public int AnoLancamento { get; set; }
     public int NumeroEpisodios { get; set; }
     public Guid DiretorId { get; set; }
+    public IFormFile? Imagem { get; set; }
+    public string? ImageUrl { get; set; }
 }

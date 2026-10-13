@@ -1,5 +1,5 @@
 @model TesteTecnico.Application.Dtos.QueryResponse<
-    TesteTecnico.Application.Dtos.GetDiretorResponse>
+TesteTecnico.Application.Dtos.GetDiretorResponse >
 
 <div class="modal fade justify-content-center" id="modalNovoAnime" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
@@ -9,32 +9,16 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                <form method="post" action="/api/anime" id="formNovoAnime" class="d-flex flex-column gap-3">
-                    <input
-                        class="form-control"
-                        type="text"
-                        name="Nome"
-                        required
-                        maxlength="200"
-                        placeholder="Nome do anime..."
-                        aria-label="Nome do anime..." />
-                    <input
-                        class="form-control"
-                        type="number"
-                        name="AnoLancamento"
-                        required
-                        min="1901"
-                        max="@DateTime.Now.Year"
-                        placeholder="Ano de lançamento..."
-                        aria-label="Ano de lançamento..." />
-                    <input
-                        class="form-control"
-                        type="number"
-                        name="NumeroEpisodios"
-                        required
-                        min="1"
-                        placeholder="Número de episódios..."
-                        aria-label="Número de episódios..." />
+                <form method="post" action="/api/anime" enctype="multipart/form-data" id="formNovoAnime"
+                      class="d-flex flex-column gap-3">
+                    <input class="form-control" type="file" name="Imagem" accept="image/jpeg,image/png,image/webp"
+                           required aria-label="Imagem do anime" />
+                    <input class="form-control" type="text" name="Nome" required maxlength="200"
+                           placeholder="Nome do anime..." aria-label="Nome do anime..." />
+                    <input class="form-control" type="number" name="AnoLancamento" required min="1901"
+                           max="@DateTime.Now.Year" placeholder="Ano de lançamento..." aria-label="Ano de lançamento..." />
+                    <input class="form-control" type="number" name="NumeroEpisodios" required min="1"
+                           placeholder="Número de episódios..." aria-label="Número de episódios..." />
                     <select class="form-select" name="DiretorId" aria-label="Diretor" required>
                         <option value="" selected disabled>Selecione um diretor...</option>
                         @foreach (var diretor in Model.Items)
@@ -42,13 +26,8 @@
                             <option value="@diretor.Id">@diretor.Nome</option>
                         }
                     </select>
-                    <textarea
-                        class="form-control"
-                        name="Descricao"
-                        required
-                        maxlength="500"
-                        placeholder="Descrição do anime..."
-                        aria-label="Descrição do anime..."></textarea>
+                    <textarea class="form-control" name="Descricao" required maxlength="500"
+                              placeholder="Descrição do anime..." aria-label="Descrição do anime..."></textarea>
                     <button class="btn btn-primary" type="submit">Salvar</button>
                 </form>
             </div>
@@ -62,15 +41,11 @@
 
         const form = event.target;
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
 
         try {
             const response = await fetch(form.action, {
                 method: form.method,
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: new URLSearchParams(data)
+                body: formData
             });
             
             if (response.ok) {

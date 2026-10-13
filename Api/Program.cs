@@ -4,6 +4,7 @@ using TesteTecnico.Application.Interfaces;
 using TesteTecnico.Application.Services;
 using TesteTecnico.Infraestructure.Data;
 using TesteTecnico.Infraestructure.Repositories;
+using TesteTecnico.Infraestructure.Storage;
 using Scalar.AspNetCore;
 using FluentValidation;
 using TesteTecnico.Application.Validators;
@@ -30,6 +31,7 @@ builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
 builder.Services.AddScoped<IDiretorRepository, DiretorRepository>();
 builder.Services.AddScoped<IDiretorService, DiretorService>();
+builder.Services.AddScoped<IImageStorage, LocalImageStorage>();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateAnimeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateAnimeValidator>();

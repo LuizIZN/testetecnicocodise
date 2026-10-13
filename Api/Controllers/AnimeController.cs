@@ -8,9 +8,12 @@ using FluentValidation;
 
 [ApiController]
 [Route("api/anime")]
-public sealed class AnimeController(IAnimeService animeService) : Controller
+public sealed class AnimeController(
+    IAnimeService animeService,
+    IImageStorage imageStorage) : Controller
 {
     private readonly IAnimeService _animeService = animeService;
+    private readonly IImageStorage _imageStorage = imageStorage;
 
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
@@ -27,12 +30,27 @@ public sealed class AnimeController(IAnimeService animeService) : Controller
 
         try
         {
+            if (request.Imagem is null)
+            {
+                return BadRequest(new { title = "A imagem do anime é obrigatória." });
+            }
+
+            request.ImageUrl = await _imageStorage.SaveAsync(
+                request.Imagem,
+                "uploads/animes",
+                HttpContext.RequestAborted);
+
             var result = await _animeService.AddAsync(request);
 
             return CreatedAtAction(nameof(GetById), new { id = result.Id }, result.Id);
         }
+        catch (InvalidOperationException err)
+        {
+            return BadRequest(new { title = err.Message });
+        }
         catch (Error err)
         {
+            await _imageStorage.DeleteAsync(request.ImageUrl, HttpContext.RequestAborted);
             return err.MapErrorMessage<Guid>();
         }
     } 

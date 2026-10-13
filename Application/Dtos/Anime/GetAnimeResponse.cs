@@ -9,4 +9,5 @@ public sealed class GetAnimeResponse
     public int AnoLancamento { get; set; }
     public GetDiretorResponse Diretor { get; set; } = null!;
     public int NumeroEpisodios { get; set; }
+    public string? ImageUrl { get; set; }
 }

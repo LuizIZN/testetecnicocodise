@@ -67,7 +67,13 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
 
     public async Task<Anime> AddAsync(CreateAnimeRequest anime)
     {
-        var newAnime = new Anime(Nome: anime.Nome, Descricao: anime.Descricao, AnoLancamento: anime.AnoLancamento, DiretorId: anime.DiretorId, NumeroEpisodios: anime.NumeroEpisodios);
+        var newAnime = new Anime(
+            Nome: anime.Nome,
+            Descricao: anime.Descricao,
+            AnoLancamento: anime.AnoLancamento,
+            DiretorId: anime.DiretorId,
+            NumeroEpisodios: anime.NumeroEpisodios,
+            ImageUrl: anime.ImageUrl);
 
         await _context.Animes.AddAsync(newAnime);
         await _context.SaveChangesAsync();
