@@ -52,6 +52,19 @@ builder.Services.AddAdminLte(options =>
     };
 });
 
+builder.Services.AddHttpClient("ApiClient", client =>
+{
+client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? throw new InvalidOperationException("ApiBaseUrl configuration is not set."));
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    return new SocketsHttpHandler
+    {
+        PooledConnectionLifetime = TimeSpan.FromMinutes(2),
+        PooledConnectionIdleTimeout = TimeSpan.FromMinutes(1)
+    };
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

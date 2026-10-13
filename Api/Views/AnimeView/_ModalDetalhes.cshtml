@@ -1,0 +1,34 @@
+@model TesteTecnico.Application.Dtos.GetAnimeResponse
+
+<div class="modal fade" id="modalDetalhes-@Model.Id" tabindex="-1" aria-labelledby="modalDetalhesLabel-@Model.Id" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDetalhesLabel-@Model.Id">Detalhes do Anime</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Nome:</label>
+                    <p>@Model.Nome</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Ano de Lançamento:</label>
+                    <p>@Model.AnoLancamento</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Número de Episódios:</label>
+                    <p>@Model.NumeroEpisodios</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Diretor:</label>
+                    <p>@Model.Diretor.Nome</p>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Descrição:</label>
+                    <p>@Model.Descricao</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

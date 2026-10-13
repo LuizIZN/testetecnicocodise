@@ -5,6 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Anime API</title>
     <adminlte-styles></adminlte-styles>
+    <style>
+        .app-wrapper {
+            grid-template-areas:
+                "lte-app-header lte-app-header"
+                "lte-app-sidebar lte-app-main"
+                "lte-app-sidebar lte-app-footer";
+        }
+    </style>
 </head>
 <body class="layout-fixed">
     <div class="app-wrapper">
@@ -14,8 +22,8 @@
             </div>
         </nav>
 
-        <aside class="app-sidebar bg-body-primary shadow" data-bs-theme="light">
-            <adminlte-sidebar></adminlte-sidebar>
+        <aside class="app-sidebar bg-body-primary h-100 shadow" data-bs-theme="light">
+            <adminlte-sidebar class="h-100"></adminlte-sidebar>
         </aside>
 
         <main class="app-main">

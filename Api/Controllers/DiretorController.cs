@@ -8,7 +8,7 @@ using FluentValidation;
 namespace TesteTecnico.Api.Controllers;
 
 [ApiController]
-[Route("diretor")]
+[Route("api/diretor")]
 public sealed class DiretorController(IDiretorService diretorService) : Controller
 {
     private readonly IDiretorService _diretorService = diretorService;

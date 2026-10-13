@@ -7,13 +7,15 @@ using TesteTecnico.Api.Common;
 using FluentValidation;
 
 [ApiController]
-[Route("anime")]
+[Route("api/anime")]
 public sealed class AnimeController(IAnimeService animeService) : Controller
 {
     private readonly IAnimeService _animeService = animeService;
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create(CreateAnimeRequest request, IValidator<CreateAnimeRequest> validator)
+    public async Task<ActionResult<Guid>> Create(
+        [FromForm] CreateAnimeRequest request,
+        IValidator<CreateAnimeRequest> validator)
     {
         var validation = await validator.ValidateAsync(request);
 
