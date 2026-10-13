@@ -27,6 +27,7 @@ appsettings.json
 appsettings.Development.json
 
 init.sql
+Api/wwwroot/uploads/animes/
 
 # .NET Core
 project.lock.json
