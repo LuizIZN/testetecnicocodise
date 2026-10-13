@@ -31,9 +31,12 @@ services:
       DB_CONNECTION_STRING: Host=postgres;Port=5432;Database=${DB_NAME};Username=${APP_USER};Password=${APP_PASSWORD}
     ports:
       - "8080:8080"
+    volumes:
+      - anime_images:/app/Api/wwwroot/uploads/animes
     depends_on:
       postgres:
         condition: service_healthy
 
 volumes:
   postgres_data:
+  anime_images:
