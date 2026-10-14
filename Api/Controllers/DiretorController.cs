@@ -14,7 +14,9 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
     private readonly IDiretorService _diretorService = diretorService;
 
     [HttpPost]
-    public async Task<ActionResult<Guid>> Create(CreateDiretorRequest request, IValidator<CreateDiretorRequest> validator)
+    public async Task<ActionResult<Guid>> Create(
+        [FromForm] CreateDiretorRequest request,
+        IValidator<CreateDiretorRequest> validator)
     {
         var validation = await validator.ValidateAsync(request);
 

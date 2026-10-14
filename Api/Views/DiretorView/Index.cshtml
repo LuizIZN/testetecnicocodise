@@ -12,8 +12,9 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
 <div class="card">
     <div class="card-header d-flex w-100 justify-content-around align-items-center">
         <h1 class="card-text">Diretores</h1>
-        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalGenerico">Novo
-            Diretor</button>
+        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalNovoDiretor">
+            Novo Diretor
+        </button>
         </div>
 
         <div class="card-body w-100 d-flex flex-row flex-wrap justify-content-start align-items-center gap-3">
@@ -101,10 +102,6 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
                         </div>
                     </div>
 
-                    @foreach (var diretorItem in Model.Items)
-                    {
-                        <partial name="_ModalDetalhes" model="diretorItem" />
-                    }
                 }
 
                 @if (!Model.Items.Any())
@@ -116,3 +113,10 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
             </div>
         </div>
     </div>
+</div>
+
+<partial name="_ModalNovoDiretor" />
+@foreach (var diretorItem in Model.Items)
+{
+    <partial name="_ModalDetalhes" model="diretorItem" />
+}
