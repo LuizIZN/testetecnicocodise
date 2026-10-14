@@ -12,4 +12,10 @@ public interface IImageStorage
     Task DeleteAsync(
         string? imageUrl,
         CancellationToken cancellationToken = default);
+
+    Task<string> UpdateAsync(
+        string? oldImageUrl,
+        IFormFile newImage,
+        string folder,
+        CancellationToken cancellationToken = default);
 }

@@ -92,4 +92,15 @@ public sealed class LocalImageStorage(IWebHostEnvironment environment) : IImageS
 
         return Task.CompletedTask;
     }
+
+    public Task<string> UpdateAsync(
+        string? oldImageUrl,
+        IFormFile newImage,
+        string folder,
+        CancellationToken cancellationToken = default)
+    {
+        return DeleteAsync(oldImageUrl, cancellationToken)
+            .ContinueWith(_ => SaveAsync(newImage, folder, cancellationToken), cancellationToken)
+            .Unwrap();
+    }
 }

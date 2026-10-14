@@ -30,15 +30,13 @@ public sealed class AnimeController(
 
         try
         {
-            if (request.Imagem is null)
+            if (request.Imagem is not null)
             {
-                return BadRequest(new { title = "A imagem do anime é obrigatória." });
+                request.ImageUrl = await _imageStorage.SaveAsync(
+                    request.Imagem,
+                    "uploads/animes",
+                    HttpContext.RequestAborted);
             }
-
-            request.ImageUrl = await _imageStorage.SaveAsync(
-                request.Imagem,
-                "uploads/animes",
-                HttpContext.RequestAborted);
 
             var result = await _animeService.AddAsync(request);
 
@@ -94,7 +92,10 @@ public sealed class AnimeController(
     }
 
     [HttpPatch("{id}")]
-    public async Task<ActionResult<string>> Update(Guid id, UpdateAnimeRequest request, IValidator<UpdateAnimeRequest> validator)
+    public async Task<ActionResult<string>> Update(
+        Guid id,
+        [FromForm] UpdateAnimeRequest request,
+        IValidator<UpdateAnimeRequest> validator)
     {
         var validation = await validator.ValidateAsync(request);
 
@@ -105,6 +106,17 @@ public sealed class AnimeController(
 
         try
         {
+            if (request.Imagem is not null)
+            {
+                var existingAnime = await _animeService.GetByIdAsync(id)
+                    ?? throw new Error(404, "Anime não encontrado.", []);
+
+                request.ImageUrl = await _imageStorage.UpdateAsync(
+                    existingAnime.ImageUrl,
+                    request.Imagem,
+                    "uploads/animes",
+                    HttpContext.RequestAborted);
+            }
             await _animeService.UpdateAsync(request, id);
             return CreatedAtAction(nameof(GetById), new { id }, "Anime atualizado com sucesso!");
         }

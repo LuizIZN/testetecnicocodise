@@ -1,0 +1,78 @@
+@model TesteTecnico.Application.Dtos.GetAnimeResponse
+
+<div class="modal fade" id="modalEditar-@Model.Id" tabindex="-1"
+     aria-labelledby="modalEditarLabel-@Model.Id" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalEditarLabel-@Model.Id">Editar Anime</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <form action="/api/anime/@Model.Id" method="post"
+                  enctype="multipart/form-data"
+                  id="formEditarAnime-@Model.Id"
+                  class="modal-body d-flex flex-column gap-3">
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <div class="text-center">
+                        <img src="@Model.ImageUrl" alt="@Model.Nome" class="img-fluid rounded"
+                             style="max-height: 200px; object-fit: cover;" />
+                    </div>
+                }
+                <input class="form-control" type="file" name="Imagem"
+                       accept="image/jpeg,image/png,image/webp"
+                       aria-label="Nova imagem do anime" />
+                <small class="text-muted">Deixe vazio para manter a imagem atual.</small>
+                <input class="form-control" type="text" name="Nome" value="@Model.Nome"
+                       required maxlength="200" placeholder="Nome do anime..." aria-label="Nome do anime..." />
+                <input class="form-control" type="number" name="AnoLancamento" value="@Model.AnoLancamento"
+                       required min="1901" max="@DateTime.Now.Year"
+                       placeholder="Ano de lançamento..." aria-label="Ano de lançamento..." />
+                <input class="form-control" type="number" name="NumeroEpisodios" value="@Model.NumeroEpisodios"
+                       required min="1" placeholder="Número de episódios..."
+                       aria-label="Número de episódios..." />
+                <select class="form-select" name="DiretorId" aria-label="Diretor" required>
+                    @foreach (var diretor in ViewBag.Diretores ?? Enumerable.Empty<TesteTecnico.Application.Dtos.GetDiretorResponse>())
+                    {
+                        <option value="@diretor.Id" selected="@(diretor.Id == Model.Diretor.Id)">
+                            @diretor.Nome
+                        </option>
+                    }
+                </select>
+                <textarea class="form-control" name="Descricao" required maxlength="500"
+                          placeholder="Descrição do anime..." aria-label="Descrição do anime...">@Model.Descricao</textarea>
+                <div class="d-flex justify-content-end gap-3">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById("formEditarAnime-@Model.Id").addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const form = event.target;
+        const response = await fetch(form.action, {
+            method: "PATCH",
+            body: new FormData(form)
+        });
+
+        if (response.ok) {
+            bootstrap.Modal.getInstance(document.getElementById("modalEditar-@Model.Id")).hide();
+
+            alert("Anime atualizado!");
+
+            location.reload();
+            return;
+        }
+
+        const errorData = await response.json();
+        const messages = Object.values(errorData.errors ?? {})
+            .flat()
+            .join(" ");
+        alert("Erro ao salvar alterações: " + (messages || errorData.title));
+    });
+</script>

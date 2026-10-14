@@ -19,5 +19,6 @@ public class Anime(string Nome, string Descricao, int AnoLancamento, int NumeroE
         AnoLancamento = updatedAnime.AnoLancamento;
         NumeroEpisodios = updatedAnime.NumeroEpisodios;
         DiretorId = updatedAnime.DiretorId;
+        ImageUrl = updatedAnime.ImageUrl;
     }
 }
