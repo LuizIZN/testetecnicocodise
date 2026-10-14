@@ -1,38 +1,55 @@
 @model TesteTecnico.Application.Dtos.GetAnimeResponse
 
-<div class="modal fade" id="modalDetalhes-@Model.Id" tabindex="-1" aria-labelledby="modalDetalhesLabel-@Model.Id" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalDetalhesLabel-@Model.Id">Detalhes do Anime</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="modal fade" id="modalDetalhes-@Model.Id" tabindex="-1"
+     aria-labelledby="modalDetalhesLabel-@Model.Id" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <div>
+                    <p class="mb-1 text-white-50 text-uppercase small fw-semibold">Catálogo de animes</p>
+                    <h5 class="modal-title" id="modalDetalhesLabel-@Model.Id">@Model.Nome</h5>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
             </div>
-            <div class="modal-body">
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                {
-                    <div class="mb-3 text-center">
-                        <img src="@Model.ImageUrl" alt="@Model.Nome" class="img-fluid rounded" style="max-height: 300px;">
+            <div class="modal-body p-4">
+                <div class="row g-4">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="col-md-5">
+                            <div class="bg-light rounded p-2 text-center h-100">
+                                <img src="@Model.ImageUrl" alt="@Model.Nome"
+                                     class="img-fluid rounded h-100 w-100"
+                                     style="max-height: 320px; object-fit: cover;">
+                            </div>
+                        </div>
+                    }
+                    <div class="@(string.IsNullOrEmpty(Model.ImageUrl) ? "col-12" : "col-md-7")">
+                        <div class="mb-4">
+                            <h6 class="text-uppercase text-muted small fw-bold">Descrição</h6>
+                            <p class="mb-0">@Model.Descricao</p>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-sm-6">
+                                <div class="border rounded p-3 h-100">
+                                    <span class="text-muted small d-block">Ano de lançamento</span>
+                                    <span class="fs-5 fw-semibold">@Model.AnoLancamento</span>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="border rounded p-3 h-100">
+                                    <span class="text-muted small d-block">Episódios</span>
+                                    <span class="fs-5 fw-semibold">@Model.NumeroEpisodios</span>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="border rounded p-3">
+                                    <span class="text-muted small d-block">Diretor</span>
+                                    <span class="fw-semibold">@Model.Diretor.Nome</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                }
-                <div class="mb-3">
-                    <label class="form-label">Nome:</label>
-                    <p>@Model.Nome</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Ano de Lançamento:</label>
-                    <p>@Model.AnoLancamento</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Número de Episódios:</label>
-                    <p>@Model.NumeroEpisodios</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Diretor:</label>
-                    <p>@Model.Diretor.Nome</p>
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Descrição:</label>
-                    <p>@Model.Descricao</p>
                 </div>
             </div>
         </div>
