@@ -41,6 +41,7 @@
 
         if (response.ok) {
             bootstrap.Modal.getInstance(document.getElementById("modalNovoDiretor")).hide();
+            alert("Diretor cadastrado!");
             location.reload();
             return;
         }

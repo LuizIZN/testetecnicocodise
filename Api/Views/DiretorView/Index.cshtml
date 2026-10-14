@@ -91,13 +91,29 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
                             <div class="card-body d-flex flex-column align-items-start gap-2">
                                 <h5 class="card-title">@diretor.Nome</h5>
                                 <p class="card-text">Data de Nascimento: @diretor.DataNascimento</p>
-                                <button
-                                    class="btn btn-primary mt-auto"
-                                    type="button"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#modalDetalhesDiretor-@diretor.Id">
-                                    Detalhes
-                                </button>
+                                <div class="d-flex gap-2 w-100">
+                                    <button
+                                        class="btn btn-outline-primary w-50"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalDetalhesDiretor-@diretor.Id">
+                                        Detalhes
+                                    </button>
+                                    <button
+                                        class="btn btn-outline-warning w-50"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarDiretor-@diretor.Id">
+                                        Editar    
+                                    </button>
+                                    <button
+                                        class="btn btn-outline-danger w-50"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalExcluirDiretor-@diretor.Id">
+                                        Excluir
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -119,4 +135,5 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
 @foreach (var diretorItem in Model.Items)
 {
     <partial name="_ModalDetalhes" model="diretorItem" />
+    <partial name="_ModalEditar" model="diretorItem" />
 }
