@@ -1,0 +1,35 @@
+@model TesteTecnico.Application.Dtos.GetDiretorResponse
+
+<div class="modal fade" id="modalDetalhesDiretor-@Model.Id" tabindex="-1"
+     aria-labelledby="modalDetalhesDiretorLabel-@Model.Id" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-primary text-white">
+                <div>
+                    <p class="mb-1 text-white-50 text-uppercase small fw-semibold">Equipe criativa</p>
+                    <h5 class="modal-title" id="modalDetalhesDiretorLabel-@Model.Id">
+                        @Model.Nome
+                    </h5>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="text-center mb-4">
+                    <div class="bg-primary-subtle text-primary rounded-circle d-inline-flex align-items-center
+                                justify-content-center" style="width: 80px; height: 80px;">
+                        <span class="fs-2 fw-bold">@Model.Nome.Substring(0, 1).ToUpper()</span>
+                    </div>
+                </div>
+                <div class="border rounded p-3">
+                    <span class="text-muted small d-block">Nome completo</span>
+                    <span class="fs-5 fw-semibold">@Model.Nome</span>
+                </div>
+                <div class="border rounded p-3 mt-3">
+                    <span class="text-muted small d-block">Data de nascimento</span>
+                    <span class="fs-5 fw-semibold">@Model.DataNascimento.ToString("dd/MM/yyyy")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

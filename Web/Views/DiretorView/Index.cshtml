@@ -1,0 +1,136 @@
+@model TesteTecnico.Application.Dtos.QueryResponse<
+TesteTecnico.Application.Dtos.GetDiretorResponse >
+
+@{
+    ViewData["Title"] = "Diretores";
+
+    var totalPages = Model.PageSize > 0 ? (int)Math.Ceiling((double)Model.TotalCount / Model.PageSize) : 1;
+
+    var nome = Context.Request.Query["Nome"].ToString();
+}
+
+<div class="card">
+    <div class="card-header d-flex w-100 justify-content-around align-items-center">
+        <h1 class="card-text">Diretores</h1>
+        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalNovoDiretor">
+            Novo Diretor
+        </button>
+        </div>
+
+        <div class="card-body w-100 d-flex flex-row flex-wrap justify-content-start align-items-center gap-3">
+            <form method="get" asp-action="Index" asp-controller="DiretorView" class="d-flex w-100 gap-4">
+                <input class="form-control" type="search" name="Nome" value="@Context.Request.Query["Nome"]"
+                       placeholder="Pesquisar por nome..." aria-label="Pesquisar por nome..." />
+                <input type="hidden" name="PageNumber" value="1" />
+                <select class="form-select w-25" name="PageSize"
+                        aria-label="Tamanho da página">
+                    @foreach (var pageSize in new[] { 10, 25, 50, 100 })
+                    {
+                        <option value="@pageSize" selected="@(Model.PageSize == pageSize)">
+                            @pageSize
+                        </option>
+                    }
+                </select>
+                <button class="btn btn-outline-primary" type="submit">
+                    Buscar
+                </button>
+                <button class="btn btn-outline-secondary" type="button" onclick="window.location.href='/diretores'">
+                    Limpar
+                </button>
+            </form>
+            @if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-controller="DiretorView"
+                   asp-route-Nome="@nome"
+                   asp-route-PageNumber="@(Model.PageNumber - 1)"
+                   asp-route-PageSize="@Model.PageSize">
+                    Anterior
+                </a>
+            </li>
+
+            @for (var currentPage = 1; currentPage <= totalPages; currentPage++)
+            {
+                <li class="page-item @(currentPage == Model.PageNumber ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="Index"
+                       asp-controller="DiretorView"
+                       asp-route-Nome="@nome"
+                       asp-route-PageNumber="@currentPage"
+                       asp-route-PageSize="@Model.PageSize">
+                        @currentPage
+                    </a>
+                </li>
+            }
+
+            <li class="page-item @(Model.PageNumber >= totalPages ? "disabled" : "")">
+                <a class="page-link"
+                   asp-action="Index"
+                   asp-controller="DiretorView"
+                   asp-route-Nome="@nome"
+                   asp-route-PageNumber="@(Model.PageNumber + 1)"
+                   asp-route-PageSize="@Model.PageSize">
+                    Próxima
+                </a>
+            </li>
+        </ul>
+    </nav>
+}
+        </div>
+
+        <div class="card-body">
+            <div class="row g-3">
+                @foreach (var diretor in Model.Items)
+                {
+                    <div class="col-12 col-sm-6 col-lg-5 col-xl-2">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column align-items-start gap-2">
+                                <h5 class="card-title">@diretor.Nome</h5>
+                                <p class="card-text">Data de Nascimento: @diretor.DataNascimento</p>
+                                <div class="d-flex gap-2 w-100">
+                                    <button
+                                        class="btn btn-outline-primary w-50"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalDetalhesDiretor-@diretor.Id">
+                                        Detalhes
+                                    </button>
+                                    <button
+                                        class="btn btn-outline-success w-50"
+                                        type="button"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#modalEditarDiretor-@diretor.Id">
+                                        Editar    
+                                    </button>
+                                    <form method="post" action="/diretores/@diretor.Id/excluir"
+                                          onsubmit="return confirm('Tem certeza que deseja excluir este diretor?');">
+                                        <button class="btn btn-outline-danger w-50" type="submit">Excluir</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+
+                @if (!Model.Items.Any())
+                {
+                    <div class="col-12">
+                        <p class="text-center">Nenhum diretor encontrado.</p>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="_ModalNovoDiretor" />
+@foreach (var diretorItem in Model.Items)
+{
+    <partial name="_ModalDetalhes" model="diretorItem" />
+    <partial name="_ModalEditar" model="diretorItem" />
+}
