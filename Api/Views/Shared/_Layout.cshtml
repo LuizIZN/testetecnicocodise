@@ -7,21 +7,25 @@
     <adminlte-styles></adminlte-styles>
     <style>
         .app-wrapper {
+            min-height: 100vh;
+            grid-template-rows: auto minmax(0, 1fr);
             grid-template-areas:
                 "lte-app-header lte-app-header"
-                "lte-app-sidebar lte-app-main"
-                "lte-app-sidebar lte-app-footer";
+                "lte-app-sidebar lte-app-main";
+        }
+
+        .app-sidebar {
+            position: sticky;
+            top: 0;
+            align-self: start;
+            height: 100vh !important;
+            max-height: 100vh;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body class="layout-fixed">
     <div class="app-wrapper">
-        <nav class="app-header navbar navbar-expand bg-body">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">Anime API</a>
-            </div>
-        </nav>
-
         <aside class="app-sidebar bg-body-primary h-100 shadow" data-bs-theme="light">
             <adminlte-sidebar class="h-100"></adminlte-sidebar>
         </aside>
