@@ -109,8 +109,8 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
                                     <button
                                         class="btn btn-outline-danger w-50"
                                         type="button"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#modalExcluirDiretor-@diretor.Id">
+                                        id="buttonDelete-@diretor.Id"
+                                        onclick="confirmDelete('@diretor.Id')">
                                         Excluir
                                     </button>
                                 </div>
@@ -137,3 +137,27 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
     <partial name="_ModalDetalhes" model="diretorItem" />
     <partial name="_ModalEditar" model="diretorItem" />
 }
+
+<script>
+    function confirmDelete(diretorId) {
+        if (confirm("Tem certeza que deseja excluir este diretor?")) {
+            fetch(`/api/diretor/${diretorId}`, {
+                method: "DELETE"
+            })
+            .then(response => {
+                if (response.ok) {
+                    const card = document.querySelector(`#buttonDelete-${diretorId}`).closest('.col-12.col-sm-6.col-lg-5.col-xl-2');
+                    if (card) {
+                        card.remove();
+                    }
+                } else {
+                    alert("Erro ao excluir o diretor.");
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao excluir o diretor:", error);
+                alert("Erro ao excluir o diretor.");
+            });
+        }
+    }
+</script>
