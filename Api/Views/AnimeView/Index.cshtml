@@ -156,8 +156,8 @@
                             <button
                                 class="btn btn-outline-danger"
                                 type="button"
-                                data-bs-toggle="modal"
-                                data-bs-target="#modalExcluir-@anime.Id">
+                                id="buttonDelete-@anime.Id"
+                                onclick="confirmDelete('@anime.Id')">
                                 Excluir
                             </button>
                         </div>
@@ -185,3 +185,27 @@
     <partial name="_ModalDetalhes" model="anime" />
     <partial name="_ModalEditar" model="anime" />
 }
+
+<script>
+    function confirmDelete(animeId) {
+        if (confirm("Tem certeza que deseja excluir este anime?")) {
+            fetch(`/api/anime/${animeId}`, {
+                method: "DELETE"
+            })
+            .then(response => {
+                if (response.ok) {
+                    const card = document.querySelector(`#buttonDelete-${animeId}`).closest('.col-12.col-sm-6.col-lg-5.col-xl-2');
+                    if (card) {
+                        card.remove();
+                    }
+                } else {
+                    alert("Erro ao excluir o anime.");
+                }
+            })
+            .catch(error => {
+                console.error("Erro ao excluir o anime:", error);
+                alert("Erro ao excluir o anime.");
+            });
+        }
+    }
+</script>

@@ -131,6 +131,14 @@ public sealed class AnimeController(
     {
         try
         {
+            var existingAnime = await _animeService.GetByIdAsync(id)
+                ?? throw new Error(404, "Anime não encontrado.", []);
+
+            if (!string.IsNullOrEmpty(existingAnime.ImageUrl))
+            {
+                await _imageStorage.DeleteAsync(existingAnime.ImageUrl, HttpContext.RequestAborted);
+            }
+
             await _animeService.DeleteAsync(id);
 
             return NoContent();
