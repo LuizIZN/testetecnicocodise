@@ -1,0 +1,46 @@
+using Microsoft.AspNetCore.Mvc;
+using TesteTecnico.Application.Dtos;
+using TesteTecnico.Application.Dtos.Anime;
+using TesteTecnico.Application.Dtos.Diretor;
+using TesteTecnico.Web.Clients;
+using TesteTecnico.Web.ViewModels;
+
+namespace TesteTecnico.Web.Controllers;
+
+public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretorApiClient diretorApiClient) : Controller
+{
+    [HttpGet("/animes")]
+    public async Task<IActionResult> Index([FromQuery] QueryAnimeParameters parameters, CancellationToken cancellationToken)
+    {
+        var animes = await animeApiClient.GetAllAsync(parameters, cancellationToken);
+        var diretores = await diretorApiClient.GetAllAsync(new QueryDiretorParams(), cancellationToken);
+        return View(new AnimeViewModel { Animes = animes, Diretores = diretores });
+    }
+
+    [HttpPost("/animes")]
+    public async Task<IActionResult> Create(CreateAnimeRequest request, CancellationToken cancellationToken)
+    {
+        using var response = await animeApiClient.CreateAsync(request, cancellationToken);
+        if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+        return await ApiError(response);
+    }
+
+    [HttpPost("/animes/{id:guid}/editar")]
+    public async Task<IActionResult> Update(Guid id, UpdateAnimeRequest request, CancellationToken cancellationToken)
+    {
+        using var response = await animeApiClient.UpdateAsync(id, request, cancellationToken);
+        if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+        return await ApiError(response);
+    }
+
+    [HttpPost("/animes/{id:guid}/excluir")]
+    public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
+    {
+        using var response = await animeApiClient.DeleteAsync(id, cancellationToken);
+        if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+        return await ApiError(response);
+    }
+
+    private static async Task<BadRequestObjectResult> ApiError(HttpResponseMessage response) =>
+        new(await response.Content.ReadAsStringAsync());
+}
