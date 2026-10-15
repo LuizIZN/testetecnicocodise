@@ -8,8 +8,6 @@ using TesteTecnico.Infraestructure.Storage;
 using Scalar.AspNetCore;
 using FluentValidation;
 using TesteTecnico.Application.Validators;
-using ColorlibHQ.AdminLTE.AspNetCore;
-using ColorlibHQ.AdminLTE.AspNetCore.Menu;
 
 var builder = WebApplication.CreateBuilder();
 
@@ -24,8 +22,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddControllersWithViews();
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAnimeService, AnimeService>();
 builder.Services.AddScoped<IAnimeRepository, AnimeRepository>();
@@ -39,33 +36,6 @@ builder.Services.AddValidatorsFromAssemblyContaining<CreateDiretorValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<UpdateDiretorValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<QueryAnimeValidator>();
 builder.Services.AddValidatorsFromAssemblyContaining<QueryDiretorValidator>();
-
-builder.Services.AddAdminLte(options =>
-{
-    options.BrandText = "Animes API";
-    options.SidebarTheme = "dark";
-    options.DefaultColorMode = "auto";
-    options.Menu = new List<MenuItem>
-    {
-        new() { Header = "Navegação" },
-        new() { Text = "Dashboard", Url = "/", Icon = "bi bi-speedometer" },
-        new() { Text = "Animes", Url = "/animes", Icon = "bi bi-film" },
-        new() { Text = "Diretores", Url = "/diretores", Icon = "bi bi-person" },
-    };
-});
-
-builder.Services.AddHttpClient("ApiClient", client =>
-{
-client.BaseAddress = new Uri(builder.Configuration["ApiBaseUrl"] ?? throw new InvalidOperationException("ApiBaseUrl configuration is not set."));
-})
-.ConfigurePrimaryHttpMessageHandler(() =>
-{
-    return new SocketsHttpHandler
-    {
-        PooledConnectionLifetime = TimeSpan.FromMinutes(2),
-        PooledConnectionIdleTimeout = TimeSpan.FromMinutes(1)
-    };
-});
 
 var app = builder.Build();
 
@@ -108,9 +78,5 @@ using (var scope = app.Services.CreateScope())
 
 app.UseStaticFiles();
 app.UseRouting();
-app.UseAntiforgery();
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
