@@ -54,6 +54,10 @@ if (app.Environment.IsProduction())
     app.UseHttpsRedirection();
 }
 
+app.UseStaticFiles();
+app.UseRouting();
+app.MapControllers();
+
 app.MapGet("/health-check", () =>
 {
     return "API funcionando!";
@@ -75,8 +79,5 @@ using (var scope = app.Services.CreateScope())
     await diretorSeeder.SeedAsync();
     await animeSeeder.SeedAsync();
 }
-
-app.UseStaticFiles();
-app.UseRouting();
 
 app.Run();

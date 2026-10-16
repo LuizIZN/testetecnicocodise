@@ -5,7 +5,7 @@ using TesteTecnico.Application.Dtos.Anime;
 
 namespace TesteTecnico.Web.Clients;
 
-public sealed class AnimeApiClient(HttpClient httpClient) : IAnimeApiClient
+public sealed class AnimeApiClient(HttpClient httpClient, IConfiguration configuration) : IAnimeApiClient
 {
     public async Task<QueryResponse<GetAnimeResponse>> GetAllAsync(QueryAnimeParameters parameters, CancellationToken cancellationToken)
     {
@@ -30,7 +30,9 @@ public sealed class AnimeApiClient(HttpClient httpClient) : IAnimeApiClient
         {
             if (Uri.TryCreate(anime.ImageUrl, UriKind.Relative, out var relativeImage))
             {
-                anime.ImageUrl = new Uri(httpClient.BaseAddress!, relativeImage).ToString();
+                var publicApiBaseUrl = configuration["PublicApiBaseUrl"]
+                    ?? throw new InvalidOperationException("PublicApiBaseUrl configuration is not set.");
+                anime.ImageUrl = new Uri(new Uri(publicApiBaseUrl), relativeImage).ToString();
             }
         }
 

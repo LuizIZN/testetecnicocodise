@@ -48,8 +48,9 @@ services:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:80
       ApiBaseUrl: http://api:8080/
+      PublicApiBaseUrl: http://localhost:8080/
     ports:
-      - "80:80"
+      - "81:80"
     restart: always
     depends_on:
       api:
