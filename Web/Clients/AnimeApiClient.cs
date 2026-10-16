@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using System.Net.Http.Headers;
 using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Anime;
 
@@ -67,7 +68,9 @@ public sealed class AnimeApiClient(HttpClient httpClient) : IAnimeApiClient
 
             if (value is IFormFile file)
             {
-                content.Add(new StreamContent(file.OpenReadStream()), property.Name, file.FileName);
+                var fileContent = new StreamContent(file.OpenReadStream());
+                fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+                content.Add(fileContent, property.Name, file.FileName);
             }
             else
             {
