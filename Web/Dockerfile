@@ -4,10 +4,10 @@ WORKDIR /app
 
 COPY . .
 
-RUN dotnet restore ./TesteTecnico.Web.csproj
+RUN dotnet restore ./Web/TesteTecnico.Web.csproj
 
-RUN dotnet build ./TesteTecnico.Web.csproj -c Release -o /app/build
+RUN dotnet build ./Web/TesteTecnico.Web.csproj -c Release -o /app/build
 
 EXPOSE 80
-WORKDIR /app/Web
-ENTRYPOINT ["dotnet", "run", "--project", "TesteTecnico.Web.csproj", "--no-launch-profile"]
+WORKDIR /app/build
+ENTRYPOINT ["dotnet", "TesteTecnico.Web.dll"]

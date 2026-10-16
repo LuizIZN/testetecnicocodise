@@ -41,18 +41,19 @@ services:
 
   web:
     build:
-      context: ./Web
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Web/Dockerfile
     container_name: web-animes
     environment:
       ASPNETCORE_ENVIRONMENT: Development
       ASPNETCORE_URLS: http://+:80
+      ApiBaseUrl: http://api:8080/
     ports:
       - "80:80"
     restart: always
     depends_on:
       api:
-        condition: service_healthy
+        condition: service_started
 
 volumes:
   postgres_data:
