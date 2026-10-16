@@ -24,9 +24,23 @@ var apiBaseUrl = builder.Configuration["ApiBaseUrl"]
     ?? throw new InvalidOperationException("ApiBaseUrl configuration is not set.");
 
 builder.Services.AddHttpClient<IAnimeApiClient, AnimeApiClient>(client =>
-    client.BaseAddress = new Uri(apiBaseUrl));
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseProxy = false
+});
 builder.Services.AddHttpClient<IDiretorApiClient, DiretorApiClient>(client =>
-    client.BaseAddress = new Uri(apiBaseUrl));
+{
+    client.BaseAddress = new Uri(apiBaseUrl);
+    client.Timeout = TimeSpan.FromSeconds(30);
+})
+.ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+{
+    UseProxy = false
+});
 
 var app = builder.Build();
 

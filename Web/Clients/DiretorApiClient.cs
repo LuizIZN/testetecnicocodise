@@ -12,8 +12,17 @@ public sealed class DiretorApiClient(HttpClient httpClient) : IDiretorApiClient
             ? string.Empty
             : $"?Nome={Uri.EscapeDataString(parameters.Nome)}";
 
-        return await httpClient.GetFromJsonAsync<QueryResponse<GetDiretorResponse>>(
-            $"api/diretor{query}", cancellationToken)
+        using var response = await httpClient.GetAsync($"api/diretor{query}", cancellationToken);
+        if (!response.IsSuccessStatusCode)
+        {
+            var details = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException(
+                $"A API retornou {(int)response.StatusCode} ({response.ReasonPhrase}). " +
+                $"Detalhes: {details}");
+        }
+
+        return await response.Content.ReadFromJsonAsync<QueryResponse<GetDiretorResponse>>(
+            cancellationToken)
             ?? throw new InvalidOperationException("A API retornou uma resposta vazia.");
     }
 

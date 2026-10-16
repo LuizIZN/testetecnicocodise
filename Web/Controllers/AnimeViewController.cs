@@ -12,9 +12,22 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
     [HttpGet("/animes")]
     public async Task<IActionResult> Index([FromQuery] QueryAnimeParameters parameters, CancellationToken cancellationToken)
     {
-        var animes = await animeApiClient.GetAllAsync(parameters, cancellationToken);
-        var diretores = await diretorApiClient.GetAllAsync(new QueryDiretorParams(), cancellationToken);
-        return View(new AnimeViewModel { Animes = animes, Diretores = diretores });
+        try
+        {
+            var animes = await animeApiClient.GetAllAsync(parameters, cancellationToken);
+            var diretores = await diretorApiClient.GetAllAsync(new QueryDiretorParams(), cancellationToken);
+            return View(new AnimeViewModel { Animes = animes, Diretores = diretores });
+        }
+        catch (HttpRequestException exception)
+        {
+            return StatusCode(StatusCodes.Status503ServiceUnavailable, exception.Message);
+        }
+        catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
+        {
+            return StatusCode(
+                StatusCodes.Status504GatewayTimeout,
+                "A API demorou para responder. Tente novamente.");
+        }
     }
 
     [HttpPost("/animes")]

@@ -17,8 +17,12 @@ public sealed class AnimeApiClient(HttpClient httpClient) : IAnimeApiClient
         AddQuery(query, "PageNumber", parameters.PageNumber);
         AddQuery(query, "PageSize", parameters.PageSize);
 
-        var result = await httpClient.GetFromJsonAsync<QueryResponse<GetAnimeResponse>>(
-            $"api/anime?{string.Join("&", query)}", cancellationToken)
+        using var response = await httpClient.GetAsync(
+            $"api/anime?{string.Join("&", query)}", cancellationToken);
+        await EnsureSuccessAsync(response);
+
+        var result = await response.Content.ReadFromJsonAsync<QueryResponse<GetAnimeResponse>>(
+            cancellationToken)
             ?? throw new InvalidOperationException("A API retornou uma resposta vazia.");
 
         foreach (var anime in result.Items)
@@ -73,5 +77,18 @@ public sealed class AnimeApiClient(HttpClient httpClient) : IAnimeApiClient
 
         using var message = new HttpRequestMessage(method, path) { Content = content };
         return await httpClient.SendAsync(message, cancellationToken);
+    }
+
+    private static async Task EnsureSuccessAsync(HttpResponseMessage response)
+    {
+        if (response.IsSuccessStatusCode)
+        {
+            return;
+        }
+
+        var details = await response.Content.ReadAsStringAsync();
+        throw new HttpRequestException(
+            $"A API retornou {(int)response.StatusCode} ({response.ReasonPhrase}). " +
+            $"Detalhes: {details}");
     }
 }
