@@ -15,7 +15,7 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
 
     [HttpPost]
     public async Task<ActionResult<Guid>> Create(
-        [FromForm] CreateDiretorRequest request,
+        [FromBody] CreateDiretorRequest request,
         IValidator<CreateDiretorRequest> validator)
     {
         var validation = await validator.ValidateAsync(request);
@@ -78,7 +78,7 @@ public sealed class DiretorController(IDiretorService diretorService) : Controll
     [HttpPatch("{id}")]
     public async Task<ActionResult<string>> Update(
         Guid id,
-        [FromForm] UpdateDiretorRequest request,
+        [FromBody] UpdateDiretorRequest request,
         IValidator<UpdateDiretorRequest> validator)
     {
         var validation = await validator.ValidateAsync(request);
