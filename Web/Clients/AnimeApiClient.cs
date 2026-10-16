@@ -30,8 +30,8 @@ public sealed class AnimeApiClient(HttpClient httpClient, IConfiguration configu
         {
             if (Uri.TryCreate(anime.ImageUrl, UriKind.Relative, out var relativeImage))
             {
-                var publicApiBaseUrl = configuration["PublicApiBaseUrl"]
-                    ?? throw new InvalidOperationException("PublicApiBaseUrl configuration is not set.");
+                var publicApiBaseUrl = configuration["IPAdress"]
+                    ?? throw new InvalidOperationException("IPAdress configuration is not set.");
                 anime.ImageUrl = new Uri(new Uri(publicApiBaseUrl), relativeImage).ToString();
             }
         }

@@ -49,6 +49,7 @@ services:
       ASPNETCORE_URLS: http://+:80
       ApiBaseUrl: http://api:8080/
       PublicApiBaseUrl: http://localhost:8080/
+      IPAdress: http://${IP_SERVER}:8080/
     ports:
       - "81:80"
     restart: always
