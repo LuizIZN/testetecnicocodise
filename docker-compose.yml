@@ -39,6 +39,21 @@ services:
       postgres:
         condition: service_healthy
 
+  web:
+    build:
+      context: ./Web
+      dockerfile: Dockerfile
+    container_name: web-animes
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ASPNETCORE_URLS: http://+:80
+    ports:
+      - "80:80"
+    restart: always
+    depends_on:
+      api:
+        condition: service_healthy
+
 volumes:
   postgres_data:
   anime_images:
