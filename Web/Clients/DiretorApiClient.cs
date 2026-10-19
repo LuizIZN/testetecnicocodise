@@ -8,11 +8,20 @@ public sealed class DiretorApiClient(HttpClient httpClient) : IDiretorApiClient
 {
     public async Task<QueryResponse<GetDiretorResponse>> GetAllAsync(QueryDiretorParams parameters, CancellationToken cancellationToken)
     {
-        var query = string.IsNullOrWhiteSpace(parameters.Nome)
-            ? string.Empty
-            : $"?Nome={Uri.EscapeDataString(parameters.Nome)}";
+        var queryParameters = new List<string>
+        {
+            $"PageNumber={parameters.PageNumber}",
+            $"PageSize={parameters.PageSize}"
+        };
 
-        using var response = await httpClient.GetAsync($"api/diretor{query}", cancellationToken);
+        if (!string.IsNullOrWhiteSpace(parameters.Nome))
+        {
+            queryParameters.Add($"Nome={Uri.EscapeDataString(parameters.Nome)}");
+        }
+
+        using var response = await httpClient.GetAsync(
+            $"api/diretor?{string.Join("&", queryParameters)}",
+            cancellationToken);
         if (!response.IsSuccessStatusCode)
         {
             var details = await response.Content.ReadAsStringAsync();
