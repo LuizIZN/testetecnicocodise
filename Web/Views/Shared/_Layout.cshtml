@@ -40,6 +40,12 @@
     </div>
 
     <adminlte-scripts></adminlte-scripts>
+    @if (TempData["ErrorMessage"] is string errorMessage)
+    {
+        <script>
+            window.alert(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(errorMessage)));
+        </script>
+    }
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

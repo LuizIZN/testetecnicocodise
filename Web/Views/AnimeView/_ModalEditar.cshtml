@@ -3,15 +3,19 @@
 <div class="modal fade" id="modalEditar-@Model.Id" tabindex="-1"
      aria-labelledby="modalEditarLabel-@Model.Id" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarLabel-@Model.Id">Editar Anime</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-success text-white">
+                <div>
+                    <p class="mb-1 text-white-50 text-uppercase small fw-semibold">Anime</p>
+                    <h5 class="modal-title" id="modalEditarLabel-@Model.Id">Editar Anime</h5>
+                </div>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                        aria-label="Fechar"></button>
             </div>
             <form action="/animes/@Model.Id/editar" method="post"
                   enctype="multipart/form-data"
                   id="formEditarAnime-@Model.Id"
-                  class="modal-body d-flex flex-column gap-3">
+                  class="modal-body p-4 d-flex flex-column gap-3">
                 @if (!string.IsNullOrEmpty(Model.ImageUrl))
                 {
                     <div class="text-center">
@@ -19,28 +23,47 @@
                              style="max-height: 200px; object-fit: cover;" />
                     </div>
                 }
-                <input class="form-control" type="file" name="Imagem"
-                       accept="image/jpeg,image/png,image/webp"
-                       aria-label="Nova imagem do anime" />
+                <div>
+                    <label class="form-label" for="Imagem-@Model.Id">Nova imagem</label>
+                    <input class="form-control" id="Imagem-@Model.Id" type="file" name="Imagem"
+                           accept="image/jpeg,image/png,image/webp"
+                           aria-label="Nova imagem do anime" />
+                </div>
                 <small class="text-muted">Deixe vazio para manter a imagem atual.</small>
-                <input class="form-control" type="text" name="Nome" value="@Model.Nome"
-                       required maxlength="200" placeholder="Nome do anime..." aria-label="Nome do anime..." />
-                <input class="form-control" type="number" name="AnoLancamento" value="@Model.AnoLancamento"
-                       required min="1901" max="@DateTime.Now.Year"
-                       placeholder="Ano de lançamento..." aria-label="Ano de lançamento..." />
-                <input class="form-control" type="number" name="NumeroEpisodios" value="@Model.NumeroEpisodios"
-                       required min="1" placeholder="Número de episódios..."
-                       aria-label="Número de episódios..." />
-                <select class="form-select" name="DiretorId" aria-label="Diretor" required>
-                    @foreach (var diretor in ViewBag.Diretores ?? Enumerable.Empty<TesteTecnico.Application.Dtos.GetDiretorResponse>())
-                    {
-                        <option value="@diretor.Id" selected="@(diretor.Id == Model.Diretor.Id)">
-                            @diretor.Nome
-                        </option>
-                    }
-                </select>
-                <textarea class="form-control" name="Descricao" required maxlength="500"
-                          placeholder="Descrição do anime..." aria-label="Descrição do anime...">@Model.Descricao</textarea>
+                <div>
+                    <label class="form-label" for="Nome-@Model.Id">Nome</label>
+                    <input class="form-control" id="Nome-@Model.Id" type="text" name="Nome" value="@Model.Nome"
+                           required maxlength="200" placeholder="Nome do anime..." aria-label="Nome do anime..." />
+                </div>
+                <div>
+                    <label class="form-label" for="AnoLancamento-@Model.Id">Ano de lançamento</label>
+                    <input class="form-control" id="AnoLancamento-@Model.Id" type="number" name="AnoLancamento"
+                           value="@Model.AnoLancamento" required min="1901" max="@DateTime.Now.Year"
+                           placeholder="Ano de lançamento..." aria-label="Ano de lançamento..." />
+                </div>
+                <div>
+                    <label class="form-label" for="NumeroEpisodios-@Model.Id">Número de episódios</label>
+                    <input class="form-control" id="NumeroEpisodios-@Model.Id" type="number" name="NumeroEpisodios"
+                           value="@Model.NumeroEpisodios" required min="1" placeholder="Número de episódios..."
+                           aria-label="Número de episódios..." />
+                </div>
+                <div>
+                    <label class="form-label" for="DiretorId-@Model.Id">Diretor</label>
+                    <select class="form-select" id="DiretorId-@Model.Id" name="DiretorId"
+                            aria-label="Diretor" required>
+                        @foreach (var diretor in ViewBag.Diretores ?? Enumerable.Empty<TesteTecnico.Application.Dtos.GetDiretorResponse>())
+                        {
+                            <option value="@diretor.Id" selected="@(diretor.Id == Model.Diretor.Id)">
+                                @diretor.Nome
+                            </option>
+                        }
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label" for="Descricao-@Model.Id">Descrição</label>
+                    <textarea class="form-control" id="Descricao-@Model.Id" name="Descricao" required maxlength="500"
+                              placeholder="Descrição do anime..." aria-label="Descrição do anime...">@Model.Descricao</textarea>
+                </div>
                 <div class="d-flex justify-content-end gap-3">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                     <button type="submit" class="btn btn-primary">Salvar</button>

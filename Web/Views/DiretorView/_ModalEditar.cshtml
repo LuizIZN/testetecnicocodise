@@ -7,24 +7,29 @@
     aria-labelledby="modalEditarDiretorLabel-@Model.Id"
     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalEditarDiretorLabel-@Model.Id">
-                    Editar Diretor
-                </h5>
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-success text-white">
+                <div>
+                    <p class="mb-1 text-white-50 text-uppercase small fw-semibold">Diretor</p>
+                    <h5 class="modal-title" id="modalEditarDiretorLabel-@Model.Id">
+                        Editar Diretor
+                    </h5>
+                </div>
                 <button
                     type="button"
-                    class="btn-close"
+                    class="btn-close btn-close-white"
                     data-bs-dismiss="modal"
                     aria-label="Fechar">
                 </button>
             </div>
-            <form action="/diretores/@Model.Id/editar" method="post" class="modal-body d-flex flex-column gap-3">
+            <form action="/diretores/@Model.Id/editar" method="post"
+                  class="modal-body p-4 d-flex flex-column gap-3">
                 <div class="mb-3">
                     <label class="form-label" for="Nome">Nome:</label>
                     <input
                         class="form-control"
                         type="text"
+                        id="Nome-@Model.Id"
                         name="Nome"
                         value="@Model.Nome"
                         placeholder="Digite o nome do diretor..."
@@ -35,6 +40,7 @@
                     <input
                         class="form-control"
                         type="date"
+                        id="DataNascimento-@Model.Id"
                         name="DataNascimento"
                         value="@Model.DataNascimento.ToString("yyyy-MM-dd")"
                         placeholder="Digite a data de nascimento do diretor..."

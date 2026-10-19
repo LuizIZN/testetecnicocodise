@@ -54,6 +54,9 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
         return await ApiError(response);
     }
 
-    private static async Task<BadRequestObjectResult> ApiError(HttpResponseMessage response) =>
-        new(await response.Content.ReadAsStringAsync());
+    private async Task<IActionResult> ApiError(HttpResponseMessage response)
+    {
+        TempData["ErrorMessage"] = await response.Content.ReadAsStringAsync();
+        return RedirectToAction(nameof(Index));
+    }
 }
