@@ -106,9 +106,12 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
                                         data-bs-target="#modalEditarDiretor-@diretor.Id">
                                         Editar    
                                     </button>
-                                    <form method="post" action="/diretores/@diretor.Id/excluir"
-                                          onsubmit="return confirm('Tem certeza que deseja excluir este diretor?');">
-                                        <button class="btn btn-outline-danger" type="submit">Excluir</button>
+                                    <form method="post" action="/diretores/@diretor.Id/excluir">
+                                        <button class="btn btn-outline-danger js-confirmar-exclusao"
+                                                type="button"
+                                                data-mensagem="Tem certeza que deseja excluir este diretor?">
+                                            Excluir
+                                        </button>
                                     </form>
                                 </div>
                             </div>

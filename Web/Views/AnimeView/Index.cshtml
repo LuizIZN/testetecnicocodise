@@ -153,9 +153,12 @@
                                 data-bs-target="#modalEditar-@anime.Id">
                                 Editar
                             </button>
-                            <form method="post" action="/animes/@anime.Id/excluir"
-                                  onsubmit="return confirm('Tem certeza que deseja excluir este anime?');">
-                                <button class="btn btn-outline-danger" type="submit">Excluir</button>
+                            <form method="post" action="/animes/@anime.Id/excluir">
+                                <button class="btn btn-outline-danger js-confirmar-exclusao"
+                                        type="button"
+                                        data-mensagem="Tem certeza que deseja excluir este anime?">
+                                    Excluir
+                                </button>
                             </form>
                         </div>
                     </div>

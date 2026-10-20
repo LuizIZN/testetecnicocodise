@@ -39,11 +39,43 @@
         </main>
     </div>
 
-    <adminlte-scripts></adminlte-scripts>
+    <partial name="_ModalConfirmacao" />
     @if (TempData["ErrorMessage"] is string errorMessage)
     {
+        <partial name="_ModalAlerta" model="errorMessage" />
+    }
+
+    <adminlte-scripts></adminlte-scripts>
+    <script>
+        (() => {
+            const modalConfirmacao = document.getElementById('modalConfirmacao');
+            const mensagemConfirmacao = document.getElementById('modalConfirmacaoMensagem');
+            const botaoConfirmar = document.getElementById('confirmarExclusao');
+            let formularioPendente;
+
+            document.querySelectorAll('.js-confirmar-exclusao').forEach((botao) => {
+                botao.addEventListener('click', () => {
+                    formularioPendente = botao.closest('form');
+                    mensagemConfirmacao.textContent = botao.dataset.mensagem;
+                    bootstrap.Modal.getOrCreateInstance(modalConfirmacao).show();
+                });
+            });
+
+            botaoConfirmar.addEventListener('click', () => {
+                if (formularioPendente) {
+                    formularioPendente.submit();
+                }
+            });
+
+            modalConfirmacao.addEventListener('hidden.bs.modal', () => {
+                formularioPendente = null;
+            });
+        })();
+    </script>
+    @if (TempData["ErrorMessage"] is string)
+    {
         <script>
-            window.alert(@Html.Raw(System.Text.Json.JsonSerializer.Serialize(errorMessage)));
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAlerta')).show();
         </script>
     }
     @await RenderSectionAsync("Scripts", required: false)
