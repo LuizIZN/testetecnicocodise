@@ -1,7 +1,7 @@
 @model TesteTecnico.Application.Dtos.QueryResponse<
 TesteTecnico.Application.Dtos.GetDiretorResponse >
 
-<div class="modal fade justify-content-center" id="modalNovoAnime" tabindex="-1">
+<div class="modal fade justify-content-center" data-bs-backdrop="static" data-bs-keyboard="false" id="modalNovoAnime" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-success text-white">
@@ -58,3 +58,11 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
         </div>
     </div>
 </div>
+
+<script>
+    const modalNovoAnime = document.getElementById('modalNovoAnime');
+    modalNovoAnime.addEventListener('hidden.bs.modal', function () {
+        const form = modalNovoAnime.querySelector('form');
+        form.reset();
+    });
+</script>

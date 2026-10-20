@@ -1,4 +1,4 @@
-<div class="modal fade justify-content-center" id="modalNovoDiretor" tabindex="-1">
+<div class="modal fade justify-content-center" id="modalNovoDiretor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-success text-white">
@@ -40,3 +40,11 @@
         </div>
     </div>
 </div>
+
+<script>
+    const modalNovoDiretor = document.getElementById('modalNovoDiretor');
+    modalNovoDiretor.addEventListener('hidden.bs.modal', function () {
+        const form = modalNovoDiretor.querySelector('form');
+        form.reset();
+    });
+</script>
