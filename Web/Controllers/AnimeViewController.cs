@@ -34,7 +34,11 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
     public async Task<IActionResult> Create(CreateAnimeRequest request, CancellationToken cancellationToken)
     {
         using var response = await animeApiClient.CreateAsync(request, cancellationToken);
-        if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+        if (response.IsSuccessStatusCode)
+        {
+            TempData["SuccessMessage"] = "Anime criado com sucesso!";
+            return RedirectToAction(nameof(Index));
+        }
         return await ApiError(response);
     }
 
@@ -42,7 +46,11 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
     public async Task<IActionResult> Update(Guid id, UpdateAnimeRequest request, CancellationToken cancellationToken)
     {
         using var response = await animeApiClient.UpdateAsync(id, request, cancellationToken);
-        if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+        if (response.IsSuccessStatusCode)
+        {
+            TempData["SuccessMessage"] = "Anime atualizado com sucesso!";
+            return RedirectToAction(nameof(Index));
+        }
         return await ApiError(response);
     }
 

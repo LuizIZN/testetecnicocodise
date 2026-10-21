@@ -58,26 +58,33 @@
     {
         <partial name="_ModalAlerta" model="errorMessage" />
     }
+    @if (TempData["SuccessMessage"] is string successMessage)
+    {
+        <partial name="_ModalSucesso" model="successMessage" />
+    }
 
     <adminlte-scripts></adminlte-scripts>
     <script>
         (() => {
             const modalConfirmacao = document.getElementById('modalConfirmacao');
             const mensagemConfirmacao = document.getElementById('modalConfirmacaoMensagem');
-            const botaoConfirmar = document.getElementById('confirmarExclusao');
+            const botaoConfirmar = document.getElementById('confirmarAcao');
             let formularioPendente;
 
-            document.querySelectorAll('.js-confirmar-exclusao').forEach((botao) => {
-                botao.addEventListener('click', () => {
-                    formularioPendente = botao.closest('form');
-                    mensagemConfirmacao.textContent = botao.dataset.mensagem;
+            document.querySelectorAll('form[data-confirmacao]').forEach((formulario) => {
+                formulario.addEventListener('submit', (evento) => {
+                    evento.preventDefault();
+                    formularioPendente = formulario;
+                    mensagemConfirmacao.textContent = formulario.dataset.confirmacao;
                     bootstrap.Modal.getOrCreateInstance(modalConfirmacao).show();
                 });
             });
 
             botaoConfirmar.addEventListener('click', () => {
                 if (formularioPendente) {
-                    formularioPendente.submit();
+                    const formulario = formularioPendente;
+                    formularioPendente = null;
+                    formulario.submit();
                 }
             });
 
@@ -90,6 +97,12 @@
     {
         <script>
             bootstrap.Modal.getOrCreateInstance(document.getElementById('modalAlerta')).show();
+        </script>
+    }
+    @if (TempData["SuccessMessage"] is string)
+    {
+        <script>
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('modalSucesso')).show();
         </script>
     }
     @await RenderSectionAsync("Scripts", required: false)
