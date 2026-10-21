@@ -8,7 +8,8 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAdminLte(options =>
 {
-    options.BrandText = "Animes API";
+    options.BrandText = string.Empty;
+    options.LogoImage = "/Anime%20API%20Logo%20%26%20Favicon%20(1).png";
     options.SidebarTheme = "dark";
     options.DefaultColorMode = "auto";
     options.Menu = new List<MenuItem>

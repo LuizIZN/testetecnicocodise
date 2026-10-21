@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/x-icon" href="/Anime-API-Logo-_-Favicon-_2_.ico" />
     <title>@ViewData["Title"] - Anime API</title>
     <adminlte-styles></adminlte-styles>
     <style>
@@ -22,11 +23,24 @@
             max-height: 100vh;
             overflow-y: auto;
         }
+
+        .sidebar-brand {
+            height: 5rem;
+            padding: 1rem 1.25rem;
+            background-color: transparent;
+            border-bottom: 0;
+        }
+
+        .sidebar-brand .brand-link .brand-image,
+        .sidebar-brand .brand-link .brand-image-xl {
+            max-height: 80px;
+            box-shadown: none;
+        }
     </style>
 </head>
 <body class="layout-fixed">
     <div class="app-wrapper">
-        <aside class="app-sidebar bg-body-primary h-100 shadow" data-bs-theme="light">
+        <aside class="app-sidebar h-100" data-bs-theme="light">
             <adminlte-sidebar class="h-100"></adminlte-sidebar>
         </aside>
 
