@@ -7,5 +7,6 @@ public class UpdateAnimeRequest
     public int? NumeroEpisodios { get; set; }
     public IFormFile? Imagem { get; set; }
     public string? ImageUrl { get; set; }
+    public bool RemoverImagem { get; set; }
     public Guid? DiretorId { get; set; }
 }

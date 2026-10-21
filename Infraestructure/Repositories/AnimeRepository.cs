@@ -93,7 +93,7 @@ public sealed class AnimeRepository(AppDbContext context) : IAnimeRepository
             AnoLancamento: anime.AnoLancamento ?? existingAnime.AnoLancamento,
             DiretorId: anime.DiretorId ?? existingAnime.DiretorId,
             NumeroEpisodios: anime.NumeroEpisodios ?? existingAnime.NumeroEpisodios,
-            ImageUrl: anime.ImageUrl ?? existingAnime.ImageUrl
+            ImageUrl: anime.RemoverImagem ? null : anime.ImageUrl ?? existingAnime.ImageUrl
         );
         existingAnime.Update(updatedAnime);
         await _context.SaveChangesAsync();

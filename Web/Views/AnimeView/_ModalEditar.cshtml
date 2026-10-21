@@ -1,7 +1,7 @@
 @model TesteTecnico.Application.Dtos.GetAnimeResponse
 
-<div class="modal fade" id="modalEditar-@Model.Id" tabindex="-1"
-     aria-labelledby="modalEditarLabel-@Model.Id" aria-hidden="true">
+<div class="modal fade" id="modalEditar-@Model.Id" tabindex="-1" aria-labelledby="modalEditarLabel-@Model.Id"
+     aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-success text-white">
@@ -12,46 +12,59 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                         aria-label="Fechar"></button>
             </div>
-            <form action="/animes/@Model.Id/editar" method="post"
-                  enctype="multipart/form-data"
-                  id="formEditarAnime-@Model.Id"
-                  class="modal-body p-4 d-flex flex-column gap-3">
-                @if (!string.IsNullOrEmpty(Model.ImageUrl))
-                {
-                    <div class="text-center">
-                        <img src="@Model.ImageUrl" alt="@Model.Nome" class="img-fluid rounded"
-                             style="max-height: 200px; object-fit: cover;" />
-                    </div>
-                }
+            <form action="/animes/@Model.Id/editar" method="post" enctype="multipart/form-data"
+                  id="formEditarAnime-@Model.Id" class="modal-body p-4 d-flex flex-column gap-3">
+                <div id="imagemAtualContainer-@Model.Id" class="text-center @(string.IsNullOrEmpty(Model.ImageUrl) ? "d-none" : string.Empty)">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img id="imagemAtual-@Model.Id" src="@Model.ImageUrl" alt="@Model.Nome" class="img-fluid rounded"
+                             style="max-height: 120px; max-width: 180px; object-fit: contain;" />
+                    }
+                </div>
                 <div>
                     <label class="form-label" for="Imagem-@Model.Id">Nova imagem</label>
                     <input class="form-control" id="Imagem-@Model.Id" type="file" name="Imagem"
-                           accept="image/jpeg,image/png,image/webp"
-                           aria-label="Nova imagem do anime" />
+                           accept="image/jpeg,image/png,image/webp" aria-label="Nova imagem do anime" />
+                    <div id="imagemPreviewContainer-@Model.Id" class="mt-3 d-none">
+                        <p class="form-label mb-2">Pré-visualização</p>
+                        <img id="imagemPreview-@Model.Id" class="img-fluid rounded border"
+                             alt="Pré-visualização da nova imagem do anime"
+                             style="max-height: 120px; max-width: 180px; object-fit: contain;" />
+                    </div>
                 </div>
-                <small class="text-muted">Deixe vazio para manter a imagem atual.</small>
+                <input type="hidden" id="removerImagem-@Model.Id" name="RemoverImagem" value="false" />
+                <div class="d-flex align-items-center gap-2">
+                    <small class="text-muted">Deixe vazio para manter a imagem atual.</small>
+                    <button id="removerImagemButton-@Model.Id" type="button"
+                            class="btn btn-sm btn-outline-danger ms-auto @(string.IsNullOrEmpty(Model.ImageUrl) ? "d-none" : string.Empty)">
+                        Remover imagem
+                    </button>
+                </div>
                 <div>
                     <label class="form-label" for="Nome-@Model.Id">Nome</label>
-                    <input class="form-control" id="Nome-@Model.Id" type="text" name="Nome" value="@Model.Nome"
-                           required maxlength="200" placeholder="Nome do anime..." aria-label="Nome do anime..." />
+                    <input class="form-control" id="Nome-@Model.Id" type="text" name="Nome" value="@Model.Nome" required
+                           maxlength="200" placeholder="Nome do anime..." aria-label="Nome do anime..." />
                 </div>
-                <div>
-                    <label class="form-label" for="AnoLancamento-@Model.Id">Ano de lançamento</label>
-                    <input class="form-control" id="AnoLancamento-@Model.Id" type="number" name="AnoLancamento"
-                           value="@Model.AnoLancamento" required min="1901" max="@DateTime.Now.Year"
-                           placeholder="Ano de lançamento..." aria-label="Ano de lançamento..." />
+                <div class="d-flex gap-3">
+                    <div class="w-50">
+                        <label class="form-label" for="AnoLancamento-@Model.Id">Ano de lançamento</label>
+                        <input class="form-control" id="AnoLancamento-@Model.Id" type="number" name="AnoLancamento"
+                               value="@Model.AnoLancamento" required min="1901" max="@DateTime.Now.Year"
+                               placeholder="Ano de lançamento..." aria-label="Ano de lançamento..." />
+                    </div>
+                    <div class="w-50">
+                        <label class="form-label" for="NumeroEpisodios-@Model.Id">Número de episódios</label>
+                        <input class="form-control" id="NumeroEpisodios-@Model.Id" type="number" name="NumeroEpisodios"
+                               value="@Model.NumeroEpisodios" required min="1" placeholder="Número de episódios..."
+                               aria-label="Número de episódios..." />
+                    </div>
                 </div>
-                <div>
-                    <label class="form-label" for="NumeroEpisodios-@Model.Id">Número de episódios</label>
-                    <input class="form-control" id="NumeroEpisodios-@Model.Id" type="number" name="NumeroEpisodios"
-                           value="@Model.NumeroEpisodios" required min="1" placeholder="Número de episódios..."
-                           aria-label="Número de episódios..." />
-                </div>
+
                 <div>
                     <label class="form-label" for="DiretorId-@Model.Id">Diretor</label>
-                    <select class="form-select" id="DiretorId-@Model.Id" name="DiretorId"
-                            aria-label="Diretor" required>
-                        @foreach (var diretor in ViewBag.Diretores ?? Enumerable.Empty<TesteTecnico.Application.Dtos.GetDiretorResponse>())
+                    <select class="form-select" id="DiretorId-@Model.Id" name="DiretorId" aria-label="Diretor" required>
+                        @foreach (var diretor in ViewBag.Diretores ??
+                        Enumerable.Empty<TesteTecnico.Application.Dtos.GetDiretorResponse>())
                         {
                             <option value="@diretor.Id" selected="@(diretor.Id == Model.Diretor.Id)">
                                 @diretor.Nome
@@ -62,7 +75,8 @@
                 <div>
                     <label class="form-label" for="Descricao-@Model.Id">Descrição</label>
                     <textarea class="form-control" id="Descricao-@Model.Id" name="Descricao" required maxlength="500"
-                              placeholder="Descrição do anime..." aria-label="Descrição do anime...">@Model.Descricao</textarea>
+                              placeholder="Descrição do anime..."
+                              aria-label="Descrição do anime...">@Model.Descricao</textarea>
                 </div>
                 <div class="d-flex justify-content-end gap-3">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -71,4 +85,58 @@
             </form>
         </div>
     </div>
+
+    <script>
+        (() => {
+            const modalEditarAnime = document.getElementById('modalEditar-@Model.Id');
+            const form = modalEditarAnime.querySelector('form');
+            const imagemInput = modalEditarAnime.querySelector('#Imagem-@Model.Id');
+            const imagemAtualContainer = modalEditarAnime.querySelector('#imagemAtualContainer-@Model.Id');
+            const imagemPreviewContainer = modalEditarAnime.querySelector('#imagemPreviewContainer-@Model.Id');
+            const imagemPreview = modalEditarAnime.querySelector('#imagemPreview-@Model.Id');
+            const removerImagem = modalEditarAnime.querySelector('#removerImagem-@Model.Id');
+            const removerImagemButton = modalEditarAnime.querySelector('#removerImagemButton-@Model.Id');
+            const possuiImagem = @(string.IsNullOrEmpty(Model.ImageUrl) ? "false" : "true");
+            let imagemPreviewUrl;
+
+            const limparPreview = () => {
+                if (imagemPreviewUrl) {
+                    URL.revokeObjectURL(imagemPreviewUrl);
+                    imagemPreviewUrl = undefined;
+                }
+
+                imagemPreviewContainer.classList.add('d-none');
+                imagemPreview.removeAttribute('src');
+            };
+
+            imagemInput.addEventListener('change', () => {
+                const arquivo = imagemInput.files[0];
+                limparPreview();
+
+                if (!arquivo || !arquivo.type.startsWith('image/')) {
+                    return;
+                }
+
+                removerImagem.value = 'false';
+                imagemPreviewUrl = URL.createObjectURL(arquivo);
+                imagemPreview.src = imagemPreviewUrl;
+                imagemPreviewContainer.classList.remove('d-none');
+            });
+
+            removerImagemButton.addEventListener('click', () => {
+                imagemInput.value = '';
+                limparPreview();
+                imagemAtualContainer.classList.add('d-none');
+                removerImagem.value = 'true';
+                removerImagemButton.classList.add('d-none');
+            });
+
+            modalEditarAnime.addEventListener('hidden.bs.modal', () => {
+                form.reset();
+                limparPreview();
+                imagemAtualContainer.classList.toggle('d-none', !possuiImagem);
+                removerImagemButton.classList.toggle('d-none', !possuiImagem);
+            });
+        })();
+    </script>
 </div>

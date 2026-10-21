@@ -36,7 +36,7 @@ public sealed class LocalImageStorage(IWebHostEnvironment environment) : IImageS
 
         var extension = Path.GetExtension(image.FileName);
         if (!AllowedContentTypes.TryGetValue(extension, out var contentType) ||
-            !string.Equals(image.ContentType, contentType, StringComparison.OrdinalIgnoreCase))
+            !IsAllowedContentType(image.ContentType, contentType))
         {
             throw new InvalidOperationException("Formato de imagem inválido. Use JPG, PNG ou WEBP.");
         }
@@ -58,6 +58,13 @@ public sealed class LocalImageStorage(IWebHostEnvironment environment) : IImageS
         await image.CopyToAsync(stream, cancellationToken);
 
         return $"/{safeFolder.Replace('\\', '/')}/{fileName}";
+    }
+
+    private static bool IsAllowedContentType(string actualContentType, string expectedContentType)
+    {
+        return string.Equals(actualContentType, expectedContentType, StringComparison.OrdinalIgnoreCase) ||
+            expectedContentType == "image/jpeg" &&
+            string.Equals(actualContentType, "image/jpg", StringComparison.OrdinalIgnoreCase);
     }
 
     public Task DeleteAsync(

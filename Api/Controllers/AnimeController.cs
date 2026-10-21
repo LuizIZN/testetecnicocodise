@@ -106,17 +106,23 @@ public sealed class AnimeController(
 
         try
         {
+            var existingAnime = await _animeService.GetByIdAsync(id)
+                ?? throw new Error(404, "Anime não encontrado.", []);
+
             if (request.Imagem is not null)
             {
-                var existingAnime = await _animeService.GetByIdAsync(id)
-                    ?? throw new Error(404, "Anime não encontrado.", []);
-
                 request.ImageUrl = await _imageStorage.UpdateAsync(
                     existingAnime.ImageUrl,
                     request.Imagem,
                     "uploads/animes",
                     HttpContext.RequestAborted);
             }
+            else if (request.RemoverImagem)
+            {
+                await _imageStorage.DeleteAsync(existingAnime.ImageUrl, HttpContext.RequestAborted);
+                request.ImageUrl = null;
+            }
+
             await _animeService.UpdateAsync(request, id);
             return CreatedAtAction(nameof(GetById), new { id }, "Anime atualizado com sucesso!");
         }
