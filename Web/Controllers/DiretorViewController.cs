@@ -41,9 +41,11 @@ public sealed class DiretorViewController(IDiretorApiClient diretorApiClient) : 
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         using var response = await diretorApiClient.DeleteAsync(id, cancellationToken);
-        return response.IsSuccessStatusCode
-            ? RedirectToAction(nameof(Index))
-            : await ApiError(response);
+        if (response.IsSuccessStatusCode)
+        {
+            TempData["SuccessMessage"] = "Diretor excluído com sucesso!";
+            return RedirectToAction(nameof(Index));
+        }
     }
 
     private async Task<IActionResult> ApiError(HttpResponseMessage response)
