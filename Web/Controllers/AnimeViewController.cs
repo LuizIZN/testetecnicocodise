@@ -58,7 +58,11 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
     public async Task<IActionResult> Delete(Guid id, CancellationToken cancellationToken)
     {
         using var response = await animeApiClient.DeleteAsync(id, cancellationToken);
-        if (response.IsSuccessStatusCode) return RedirectToAction(nameof(Index));
+        if (response.IsSuccessStatusCode) 
+        {
+            TempData["SuccessMessage"] = "Anime excluído com sucesso!";
+            return RedirectToAction(nameof(Index));
+        };
         return await ApiError(response);
     }
 
