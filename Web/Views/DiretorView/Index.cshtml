@@ -91,25 +91,33 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
                             <div class="card-body d-flex flex-column align-items-start gap-2">
                                 <h5 class="card-title">@diretor.Nome</h5>
                                 <p class="card-text">Data de Nascimento: @diretor.DataNascimento</p>
-                                <div class="mt-auto d-flex gap-2 w-100 justify-content-center">
+                                <div class="mt-auto d-flex gap-3 w-100 justify-content-end">
                                     <button
                                         class="btn btn-outline-primary"
                                         type="button"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#modalDetalhesDiretor-@diretor.Id">
-                                        Detalhes
+                                        data-bs-target="#modalDetalhesDiretor-@diretor.Id"
+                                        aria-label="Visualizar @diretor.Nome"
+                                        title="Visualizar">
+                                        <i class="bi bi-eye fs-6" aria-hidden="true"></i>
                                     </button>
                                     <button
                                         class="btn btn-outline-success"
                                         type="button"
                                         data-bs-toggle="modal"
-                                        data-bs-target="#modalEditarDiretor-@diretor.Id">
-                                        Editar    
+                                        data-bs-target="#modalEditarDiretor-@diretor.Id"
+                                        aria-label="Editar @diretor.Nome"
+                                        title="Editar">
+                                        <i class="bi bi-pencil fs-6" aria-hidden="true"></i>
                                     </button>
                                     <form method="post" action="/diretores/@diretor.Id/excluir"
                                           data-confirmacao="Tem certeza que deseja excluir este diretor?">
-                                        <button class="btn btn-outline-danger" type="submit">
-                                            Excluir
+                                        <button
+                                            class="btn btn-outline-danger"
+                                            type="submit"
+                                            aria-label="Excluir @diretor.Nome"
+                                            title="Excluir">
+                                            <i class="bi bi-trash fs-6" aria-hidden="true"></i>
                                         </button>
                                     </form>
                                 </div>
