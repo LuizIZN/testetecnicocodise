@@ -46,6 +46,7 @@ public sealed class DiretorViewController(IDiretorApiClient diretorApiClient) : 
             TempData["SuccessMessage"] = "Diretor excluído com sucesso!";
             return RedirectToAction(nameof(Index));
         }
+        return await ApiError(response);
     }
 
     private async Task<IActionResult> ApiError(HttpResponseMessage response)
