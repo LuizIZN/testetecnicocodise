@@ -3,6 +3,7 @@ using TesteTecnico.Application.Dtos;
 using TesteTecnico.Application.Dtos.Anime;
 using TesteTecnico.Application.Dtos.Diretor;
 using TesteTecnico.Web.Clients;
+using TesteTecnico.Web.Helpers;
 using TesteTecnico.Web.ViewModels;
 
 namespace TesteTecnico.Web.Controllers;
@@ -62,13 +63,13 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
         {
             TempData["SuccessMessage"] = "Anime excluído com sucesso!";
             return RedirectToAction(nameof(Index));
-        };
+        }
         return await ApiError(response);
     }
 
     private async Task<IActionResult> ApiError(HttpResponseMessage response)
     {
-        TempData["ErrorMessage"] = await response.Content.ReadAsStringAsync();
+        TempData["ErrorMessage"] = await ApiErrorMessage.FromResponseAsync(response);
         return RedirectToAction(nameof(Index));
     }
 }
