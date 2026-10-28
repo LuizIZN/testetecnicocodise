@@ -1,4 +1,5 @@
-<div class="modal fade justify-content-center" id="modalNovoDiretor" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1">
+<div class="modal fade justify-content-center" id="modalNovoDiretor" data-bs-backdrop="static" data-bs-keyboard="false"
+     tabindex="-1">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content border-0 shadow">
             <div class="modal-header bg-success text-white">
@@ -13,28 +14,18 @@
                 <form method="post" action="/diretores" class="d-flex flex-column gap-3">
                     <div>
                         <label class="form-label" for="Nome">Nome</label>
-                        <input
-                            class="form-control"
-                            id="Nome"
-                            type="text"
-                            name="Nome"
-                            required
-                            maxlength="200"
-                            placeholder="Nome do diretor..."
-                            aria-label="Nome do diretor..." />
+                        <input class="form-control" id="Nome" type="text" name="Nome" required maxlength="200"
+                               placeholder="Nome do diretor..." aria-label="Nome do diretor..." />
                     </div>
                     <div>
                         <label class="form-label" for="DataNascimento">Data de nascimento</label>
-                        <input
-                            class="form-control"
-                            id="DataNascimento"
-                            type="date"
-                            name="DataNascimento"
-                            required
-                            max="@DateTime.Now.ToString("yyyy-MM-dd")"
-                            aria-label="Data de nascimento do diretor" />
+                        <input class="form-control" id="DataNascimento" type="date" name="DataNascimento" required
+                               max="@DateTime.Now.ToString("yyyy-MM-dd")" aria-label="Data de nascimento do diretor" />
                     </div>
-                    <button class="btn btn-primary" type="submit">Salvar</button>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button class="btn btn-secondary me-2" type="button" data-bs-dismiss="modal">Cancelar</button>
+                        <button class="btn btn-primary" type="submit">Salvar</button>
+                    </div>
                 </form>
             </div>
         </div>
