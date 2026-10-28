@@ -9,33 +9,55 @@ namespace TesteTecnico.Web.Controllers;
 public sealed class DiretorViewController(IDiretorApiClient diretorApiClient) : Controller
 {
     [HttpGet("/diretores")]
-    public async Task<IActionResult> Index([FromQuery] QueryDiretorParams parameters, CancellationToken cancellationToken) =>
-        View(await diretorApiClient.GetAllAsync(parameters, cancellationToken));
+    public async Task<IActionResult> Index([FromQuery] QueryDiretorParams parameters, CancellationToken cancellationToken)
+    {
+        try
+        {
+            return View(await diretorApiClient.GetAllAsync(parameters, cancellationToken));
+        }
+        catch (HttpRequestException exception)
+        {
+            TempData["ErrorMessage"] = ApiErrorMessage.FromExceptionMessage(exception.Message);
+            return RedirectToAction(nameof(Index));
+        }
+    }
 
     [HttpPost("/diretores")]
     public async Task<IActionResult> Create(CreateDiretorRequest request, CancellationToken cancellationToken)
     {
-        using var response = await diretorApiClient.CreateAsync(request, cancellationToken);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            TempData["SuccessMessage"] = "Diretor criado com sucesso!";
-            return RedirectToAction(nameof(Index));
+            using var response = await diretorApiClient.CreateAsync(request, cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Diretor criado com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+            return await ApiError(response);
         }
-
-        return await ApiError(response);
+        catch (HttpRequestException exception)
+        {
+            return RedirectWithError(exception);
+        }
     }
 
     [HttpPost("/diretores/{id:guid}/editar")]
     public async Task<IActionResult> Update(Guid id, UpdateDiretorRequest request, CancellationToken cancellationToken)
     {
-        using var response = await diretorApiClient.UpdateAsync(id, request, cancellationToken);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            TempData["SuccessMessage"] = "Diretor atualizado com sucesso!";
-            return RedirectToAction(nameof(Index));
+            using var response = await diretorApiClient.UpdateAsync(id, request, cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Diretor atualizado com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+            return await ApiError(response);
         }
-
-        return await ApiError(response);
+        catch (HttpRequestException exception)
+        {
+            return RedirectWithError(exception);
+        }
     }
 
     [HttpPost("/diretores/{id:guid}/excluir")]
@@ -53,6 +75,12 @@ public sealed class DiretorViewController(IDiretorApiClient diretorApiClient) : 
     private async Task<IActionResult> ApiError(HttpResponseMessage response)
     {
         TempData["ErrorMessage"] = await ApiErrorMessage.FromResponseAsync(response);
+        return RedirectToAction(nameof(Index));
+    }
+
+    private IActionResult RedirectWithError(HttpRequestException exception)
+    {
+        TempData["ErrorMessage"] = ApiErrorMessage.FromExceptionMessage(exception.Message);
         return RedirectToAction(nameof(Index));
     }
 }

@@ -18,8 +18,9 @@
         <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#modalNovoAnime">Novo Anime</button>
     </div>
 
-    <div class="card-body w-100 d-flex flex-row flex-wrap justify-content-start align-items-center gap-3">
-        <form method="get" action="/animes" class="d-flex w-100 gap-4">
+    <div class="card-body w-100 d-flex flex-row flex-wrap justify-content-start align-items-center gap-1">
+        <h4>Filtros</h4>
+        <form method="get" action="/animes" class="d-flex w-100 gap-3">
             <input
                 class="form-control"
                 type="search"
@@ -34,8 +35,8 @@
                 value="@Context.Request.Query["AnoLancamentoMin"]"
                 min="1900"
                 max="@DateTime.Now.Year"
-                placeholder="Pesquisar por ano de lançamento (min)..."
-                aria-label="Pesquisar por ano de lançamento (min)..." />
+                placeholder="Ano de lançamento (min)..."
+                aria-label="Ano de lançamento (min)..." />
             <input
                 class="form-control"
                 type="number"
@@ -43,29 +44,29 @@
                 min="1900"
                 max="@DateTime.Now.Year"
                 value="@Context.Request.Query["AnoLancamentoMax"]"
-                placeholder="Pesquisar por ano de lançamento (max)..."
-                aria-label="Pesquisar por ano de lançamento (max)..." />
+                placeholder="Ano de lançamento (max)..."
+                aria-label="Ano de lançamento (max)..." />
             <input
                 class="form-control"
                 type="number"
                 name="NumeroEpisodiosMin"
                 min="1"
                 value="@Context.Request.Query["NumeroEpisodiosMin"]"
-                placeholder="Pesquisar por número de episódios (min)..."
-                aria-label="Pesquisar por número de episódios (min)..." />
+                placeholder="Número de episódios (min)..."
+                aria-label="Número de episódios (min)..." />
             <input
                 class="form-control"
                 type="number"
                 name="NumeroEpisodiosMax"
                 min="1"
                 value="@Context.Request.Query["NumeroEpisodiosMax"]"
-                placeholder="Pesquisar por número de episódios (max)..."
-                aria-label="Pesquisar por número de episódios (max)..." />
-            <select class="form-select" name="PageSize" aria-label="Tamanho da página">
+                placeholder="Número de episódios (max)..."
+                aria-label="Número de episódios (max)..." />
+            <select class="form-select w-auto" name="PageSize" aria-label="Tamanho da página">
                 @foreach (var pageSize in new[] { 10, 25, 50, 100 })
                 {
                     <option value="@pageSize" selected="@(Model.Animes.PageSize == pageSize)">
-                        @pageSize
+                        @pageSize animes por página
                     </option>
                 }
             </select>

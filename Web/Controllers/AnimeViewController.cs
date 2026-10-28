@@ -16,12 +16,14 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
         try
         {
             var animes = await animeApiClient.GetAllAsync(parameters, cancellationToken);
+
             var diretores = await diretorApiClient.GetAllAsync(new QueryDiretorParams(), cancellationToken);
             return View(new AnimeViewModel { Animes = animes, Diretores = diretores });
         }
         catch (HttpRequestException exception)
         {
-            return StatusCode(StatusCodes.Status503ServiceUnavailable, exception.Message);
+            TempData["ErrorMessage"] = ApiErrorMessage.FromExceptionMessage(exception.Message);
+            return RedirectToAction(nameof(Index));
         }
         catch (TaskCanceledException) when (!cancellationToken.IsCancellationRequested)
         {
@@ -34,25 +36,39 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
     [HttpPost("/animes")]
     public async Task<IActionResult> Create(CreateAnimeRequest request, CancellationToken cancellationToken)
     {
-        using var response = await animeApiClient.CreateAsync(request, cancellationToken);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            TempData["SuccessMessage"] = "Anime criado com sucesso!";
-            return RedirectToAction(nameof(Index));
+            using var response = await animeApiClient.CreateAsync(request, cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Anime criado com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+            return await ApiError(response);
         }
-        return await ApiError(response);
+        catch (HttpRequestException exception)
+        {
+            return RedirectWithError(exception);
+        }
     }
 
     [HttpPost("/animes/{id:guid}/editar")]
     public async Task<IActionResult> Update(Guid id, UpdateAnimeRequest request, CancellationToken cancellationToken)
     {
-        using var response = await animeApiClient.UpdateAsync(id, request, cancellationToken);
-        if (response.IsSuccessStatusCode)
+        try
         {
-            TempData["SuccessMessage"] = "Anime atualizado com sucesso!";
-            return RedirectToAction(nameof(Index));
+            using var response = await animeApiClient.UpdateAsync(id, request, cancellationToken);
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Anime atualizado com sucesso!";
+                return RedirectToAction(nameof(Index));
+            }
+            return await ApiError(response);
         }
-        return await ApiError(response);
+        catch (HttpRequestException exception)
+        {
+            return RedirectWithError(exception);
+        }
     }
 
     [HttpPost("/animes/{id:guid}/excluir")]
@@ -70,6 +86,12 @@ public sealed class AnimeViewController(IAnimeApiClient animeApiClient, IDiretor
     private async Task<IActionResult> ApiError(HttpResponseMessage response)
     {
         TempData["ErrorMessage"] = await ApiErrorMessage.FromResponseAsync(response);
+        return RedirectToAction(nameof(Index));
+    }
+
+    private IActionResult RedirectWithError(HttpRequestException exception)
+    {
+        TempData["ErrorMessage"] = ApiErrorMessage.FromExceptionMessage(exception.Message);
         return RedirectToAction(nameof(Index));
     }
 }

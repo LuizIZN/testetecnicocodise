@@ -22,12 +22,12 @@ TesteTecnico.Application.Dtos.GetDiretorResponse >
                 <input class="form-control" type="search" name="Nome" value="@Context.Request.Query["Nome"]"
                        placeholder="Pesquisar por nome..." aria-label="Pesquisar por nome..." />
                 <input type="hidden" name="PageNumber" value="1" />
-                <select class="form-select w-25" name="PageSize"
+                <select class="form-select w-auto" name="PageSize"
                         aria-label="Tamanho da página">
                     @foreach (var pageSize in new[] { 10, 25, 50, 100 })
                     {
                         <option value="@pageSize" selected="@(Model.PageSize == pageSize)">
-                            @pageSize
+                            @pageSize animes por página
                         </option>
                     }
                 </select>
