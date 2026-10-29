@@ -85,7 +85,7 @@
             <li class="page-item @(Model.Animes.PageNumber == 1 ? "disabled" : "")">
                 <a class="page-link"
                    asp-action="Index"
-                   asp-controller="DiretorView"
+                   asp-controller="AnimeView"
                    asp-route-Nome="@nome"
                    asp-route-PageNumber="@(Model.Animes.PageNumber - 1)"
                    asp-route-PageSize="@Model.Animes.PageSize">
