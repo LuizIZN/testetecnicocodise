@@ -36,11 +36,69 @@
             max-height: 80px;
             box-shadown: none;
         }
+
+        .sidebar-toggle {
+            display: none;
+        }
+
+        .sidebar-close {
+            display: none;
+        }
+
+        @@media (max-width: 991.98px) {
+            .sidebar-toggle {
+                display: inline-flex;
+                position: fixed;
+                top: 0.75rem;
+                left: 0.75rem;
+                z-index: 1040;
+                align-items: center;
+                justify-content: center;
+                width: 2.75rem;
+                height: 2.75rem;
+            }
+
+            .sidebar-close {
+                display: inline-flex;
+                position: absolute;
+                top: 1.375rem;
+                right: 0.75rem;
+                z-index: 1040;
+                align-items: center;
+                justify-content: center;
+                width: 2.25rem;
+                height: 2.25rem;
+                transform: translateY(-50%);
+            }
+
+            body.sidebar-open .sidebar-toggle {
+                display: none;
+            }
+
+            .app-main {
+                padding-top: 3.5rem;
+            }
+        }
     </style>
 </head>
-<body class="layout-fixed">
+<body class="layout-fixed sidebar-expand-lg">
+    <button class="btn btn-primary sidebar-toggle"
+            type="button"
+            data-lte-toggle="sidebar"
+            aria-label="Abrir menu"
+            title="Abrir menu">
+        <i class="bi bi-list" aria-hidden="true"></i>
+    </button>
+
     <div class="app-wrapper">
         <aside class="app-sidebar h-100" data-bs-theme="light">
+            <button class="btn btn-outline-secondary sidebar-close"
+                    type="button"
+                    data-lte-toggle="sidebar"
+                    aria-label="Fechar menu"
+                    title="Fechar menu">
+                <i class="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
             <adminlte-sidebar class="h-100"></adminlte-sidebar>
         </aside>
 
